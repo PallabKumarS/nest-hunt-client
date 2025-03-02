@@ -10,24 +10,32 @@
 }
 
 :root {
-  --background: hsla(34, 41%, 93%, 0.897); /* for main background color  */
-  --foreground: hsl(120, 4%, 26%); /* for main text color  */
-  --card: hsl(55, 21%, 88%); /* for card background color  */
-  --card-foreground: hsl(225, 25%, 20%);
-  --popover: hsla(0, 0%, 100%, 0.418);
+  --background: hsla(65, 29%, 92%, 0.74); /* for main background color  */
+  --foreground: hsl(78, 18%, 43%); /* for main text color  */
+  --card: hsl(56, 28%, 90%); /* for card background color  */
+  --card-foreground: hsl(78, 18%, 43%); /* for card or tabs label color  */
+  --popover: hsl(0, 0%, 100%);
   --popover-foreground: hsl(36, 83%, 49%);
-  --primary: hsl(98, 80%, 43%);
-  --primary-foreground: hsla(0, 0%, 100%, 0.479);
+  --primary: hsl(
+    98,
+    27%,
+    53%
+  ); /* for primary (works with anything primary) color  */
+  --primary-foreground: hsla(0, 0%, 100%, 0.979);
   --secondary: hsla(0, 89%, 51%, 0.342);
-  --secondary-foreground: hsl(22, 90%, 49%);
+  --secondary-foreground: hsl(
+    120,
+    4%,
+    26%
+  ); /* for secondary like pop over text or button text color  */
   --muted: hsla(204, 20%, 95%, 0.527);
   --muted-foreground: hsl(120, 4%, 26%); /* for card text color  */
   --accent: hsl(98, 80%, 43%); /* hover background color  */
   --accent-foreground: hsl(111, 11%, 25%); /* hover text color  */
   --destructive: hsl(0, 70%, 50%);
   --destructive-foreground: hsla(0, 94%, 51%, 0.466);
-  --border: hsla(108, 28%, 75%, 0.521);
-  --input: hsla(197, 14%, 90%, 0.075);
+  --border: hsla(73, 67%, 54%); /* border color  */
+  --input: hsla(82, 17%, 75%, 0.815); /* input field border color  */
   --ring: hsl(73, 67%, 54%); /* selected border color  */
   --radius: 0.75rem;
   --chart-1: hsl(17, 70%, 55%);

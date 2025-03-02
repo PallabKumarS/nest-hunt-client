@@ -178,6 +178,7 @@ export default function RegisterForm() {
           )}
         />
         <Button
+          variant={"outline"}
           disabled={!!(passwordConfirm && password !== passwordConfirm)}
           type="submit"
         >

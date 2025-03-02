@@ -109,7 +109,7 @@ export default function LoginForm() {
           )}
         />
 
-        <Button>{isSubmitting ? "Logging..." : "Login"}</Button>
+        <Button variant={"outline"}>{isSubmitting ? "Logging..." : "Login"}</Button>
       </form>
     </Form>
   );

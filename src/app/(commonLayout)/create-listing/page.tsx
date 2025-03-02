@@ -1,9 +1,13 @@
+import CreateListing from "@/components/modules/pages/CreateListing";
+
+export const metadata = {
+  title: "NH || Create Listing",
+  description:
+    "Create Listing with appropriate information and images for the property",
+};
+
 const page = () => {
-  return (
-    <div>
-      <h1>This is page Component</h1>
-    </div>
-  );
+  return <CreateListing />;
 };
 
 export default page;
