@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "NextMart | Login",
+  title: "NestHunt | Login",
   description: "Login to your account or register a new account",
 };
 

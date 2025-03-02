@@ -1,5 +1,6 @@
 "use client";
 
+import StoreProvider from "./StoreProvider";
 import { ThemeProvider } from "./ThemeProvide";
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
@@ -10,7 +11,7 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       enableSystem
       disableTransitionOnChange
     >
-      {children}
+      <StoreProvider>{children}</StoreProvider>
     </ThemeProvider>
   );
 };

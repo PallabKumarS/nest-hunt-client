@@ -17,6 +17,9 @@ import { Button } from "../ui/button";
 import { PasswordInput } from "../ui/password-input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { loginUser } from "@/services/AuthService";
+import { useAppDispatch } from "@/redux/hook";
+import { login } from "@/redux/features/authSlice";
+import { jwtDecode } from "jwt-decode";
 
 const formSchema = z.object({
   email: z.string(),
@@ -27,6 +30,7 @@ export default function LoginForm() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get("redirectPath");
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,6 +45,10 @@ export default function LoginForm() {
     try {
       const res = await loginUser(values);
       if (res?.success) {
+        console.log(res);
+        const user = jwtDecode(res?.data?.accessToken);
+        console.log(user);
+        dispatch(login(user));
         toast.success(res?.message, { id: toastId });
         if (redirectPath) {
           router.push(redirectPath);

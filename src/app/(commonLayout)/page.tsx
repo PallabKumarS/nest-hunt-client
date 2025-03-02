@@ -1,8 +1,21 @@
+import HeroSection from "@/components/modules/home/HeroSection";
+import Testimonials from "@/components/modules/home/Testimonials";
+import Tips from "@/components/modules/home/Tips";
+import Container from "@/components/shared/Container";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "NestHunt | Home",
+  description: "Welcome to NestHunt, your gateway to finding your dream home.",
+};
+
 const page = () => {
   return (
-    <div>
-      <h1>This is page Component</h1>
-    </div>
+    <Container className="space-y-10">
+      <HeroSection />
+      <Testimonials />
+      <Tips />
+    </Container>
   );
 };
 
