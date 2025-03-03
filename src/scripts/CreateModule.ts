@@ -42,6 +42,26 @@ export const getAll${capitalize(moduleName)}s = async () => {
   }
 };
 
+// Get single ${moduleName}
+export const getSingle${capitalize(
+  moduleName
+)} = async (${moduleName.toLowerCase()}Id: string) => {
+  const token = await getValidToken();
+  try {
+    const res = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_API}/${moduleName.toLowerCase()}s/:${moduleName.toLowerCase()}Id\`, {
+      next: {
+        tags: ["${moduleName}"],
+      },
+       headers: {
+        Authorization: token,
+      },
+    });
+    return await res.json();
+  } catch (error: any) {
+    return Error(error.message);
+  }
+};
+
 // Create ${moduleName}
 export const create${capitalize(
   moduleName

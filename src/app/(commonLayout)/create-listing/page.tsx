@@ -1,13 +1,17 @@
-import CreateListing from "@/components/modules/pages/CreateListing";
+import CreateListing from "@/components/modules/listing/CreateListing";
+import { getPersonalListings } from "@/services/ListingService";
+import { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "NH || Create Listing",
   description:
     "Create Listing with appropriate information and images for the property",
 };
 
-const page = () => {
-  return <CreateListing />;
+const CreateListingPage = async () => {
+  const listings = await getPersonalListings();
+
+  return <CreateListing listings={listings?.data} />;
 };
 
-export default page;
+export default CreateListingPage;

@@ -159,6 +159,7 @@ export default function ListingForm() {
           )}
         />
 
+        {/* images field  */}
         <div>
           <div className="flex justify-between items-center border-t border-b py-3 my-5">
             <p className="text-primary font-bold text-xl">

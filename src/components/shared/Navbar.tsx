@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "../ui/button";
-import { Heart, LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import Link from "next/link";
 import {
   DropdownMenu,
@@ -27,7 +27,7 @@ export default function Navbar() {
   const user = useAppSelector(userSelector);
 
   const navItems = [
-    { href: "/listings", label: "Houses" },
+    { href: "/listings", label: "All Rentals" },
     { href: "/about", label: "About" },
   ];
 
