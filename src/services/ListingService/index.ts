@@ -10,11 +10,14 @@ export const getAllListings = async (query: Record<string, unknown>) => {
     query as Record<string, string>
   ).toString();
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/listings?${queryString}`, {
-      next: {
-        tags: ["listings"],
-      },
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/listings?${queryString}`,
+      {
+        next: {
+          tags: ["listings"],
+        },
+      }
+    );
     return await res.json();
   } catch (error: any) {
     return Error(error.message);
@@ -77,6 +80,7 @@ export const createListing = async (listingData: TListing): Promise<any> => {
 
     revalidateTag("listings");
     revalidateTag("PListings");
+    revalidateTag("locations");
 
     return await res.json();
   } catch (error: any) {
@@ -128,8 +132,28 @@ export const deleteListing = async (listingId: string): Promise<any> => {
 
     revalidateTag("listings");
     revalidateTag("PListings");
+    revalidateTag("locations");
+
     return res.json();
   } catch (error: any) {
     return Error(error);
+  }
+};
+
+// get listing locations
+export const getListingLocations = async (): Promise<any> => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/listings/locations`,
+      {
+        next: {
+          tags: ["locations"],
+        },
+      }
+    );
+
+    return await res.json();
+  } catch (error: any) {
+    return Error(error.message);
   }
 };

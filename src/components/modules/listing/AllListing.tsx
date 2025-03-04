@@ -1,3 +1,4 @@
+import Filter from "@/components/shared/Filter";
 import ListingCard from "./ListingCard";
 import NoData from "@/components/shared/NoData";
 import { PaginationComponent } from "@/components/shared/Pagination";
@@ -11,13 +12,17 @@ interface AllListingProps {
 const AllListing = ({ listings, meta }: AllListingProps) => {
   return (
     <div className="space-y-8">
-      <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Available Properties
-        </h1>
-        <p className="text-muted-foreground">
-          Discover your perfect home from our curated collection of properties
-        </p>
+      <div className="gap-2 items-center flex flex-col md:flex-row justify-between">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold tracking-tight">
+            Available Properties
+          </h1>
+          <p className="text-muted-foreground">
+            Discover your perfect home from our curated collection of properties
+          </p>
+        </div>
+
+        <Filter />
       </div>
 
       {listings?.length > 0 ? (

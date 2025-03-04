@@ -18,7 +18,7 @@ const AllListingsPage = async ({
   const listings = await getAllListings(await searchParams);
 
   return (
-    <Container>
+    <Container className="">
       <AllListing listings={listings?.data} meta={listings?.meta} />
     </Container>
   );

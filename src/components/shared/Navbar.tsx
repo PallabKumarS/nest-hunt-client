@@ -19,6 +19,7 @@ import { logout, userSelector } from "@/redux/features/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { config } from "@/middleware";
 import Searchbar from "./Searchbar";
+import { deleteCookie } from "@/services/AuthService";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,13 +35,15 @@ export default function Navbar() {
 
   const handleLogout = () => {
     dispatch(logout());
+    deleteCookie();
+
     if (config.matcher.some((route) => pathname.match(route))) {
       router.push("/login");
     }
   };
 
   return (
-    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
+    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-30 mt-2">
       <nav className="container mx-auto px-4 pb-2 lg:h-16 flex items-center justify-center lg:justify-between gap-4 flex-wrap lg:flex-nowrap">
         {/* Logo */}
         <div onClick={() => router.push("/")} className="flex-shrink-0">
@@ -50,14 +53,7 @@ export default function Navbar() {
         </div>
 
         {/* Search Bar - Always in main navbar */}
-        {/* <div className="flex-grow max-w-md hidden md:block">
-          <input
-            type="text"
-            placeholder="Search for houses..."
-            className="w-full px-4 py-2 rounded-full border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
-          />
-        </div> */}
-        <div className="flex-grow max-w-md hidden md:block z-50">
+        <div className="flex-grow max-w-md hidden md:block z-[100]">
           <Searchbar />
         </div>
 
@@ -141,12 +137,8 @@ export default function Navbar() {
       </nav>
 
       {/* Mobile Search - Always visible on small screens */}
-      <div className="md:hidden px-4 py-2 border-t">
-        <input
-          type="text"
-          placeholder="Search for houses..."
-          className="w-full px-4 py-2 rounded-full border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
-        />
+      <div className="flex-grow max-w-xs md:hidden z-[100] mx-auto mb-2">
+        <Searchbar />
       </div>
 
       {/* Mobile Navigation Menu */}

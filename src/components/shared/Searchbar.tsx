@@ -52,7 +52,7 @@ const Searchbar = () => {
   };
 
   return (
-    <div className="relative w-full" ref={searchRef}>
+    <div className="relative w-full " ref={searchRef}>
       <div className="relative">
         <input
           name="searchTerm"
@@ -71,17 +71,17 @@ const Searchbar = () => {
       </div>
 
       {isOpen && (
-        <div className="absolute top-full mt-2 w-full bg-background/95 border rounded-lg shadow-xl max-h-[300px] overflow-y-auto z-[100]">
+        <div className="absolute top-full mt-2 w-full bg-yellow-50 dark:bg-cyan-950 border rounded-lg shadow-xl max-h-[300px] overflow-y-auto z-[100]">
           <div className="p-4 space-y-4">
             {!searchQuery && (
               <div className="space-y-3">
                 <h3 className="font-semibold text-lg">Popular Searches</h3>
                 <div className="flex flex-wrap gap-2">
                   <span className="px-4 py-2 bg-muted/80 rounded-full text-sm cursor-pointer hover:bg-primary/20 transition-colors">
-                    2 Bedroom
+                    rangpur
                   </span>
                   <span className="px-4 py-2 bg-muted/80 rounded-full text-sm cursor-pointer hover:bg-primary/20 transition-colors">
-                    Under $1000
+                    10000
                   </span>
                 </div>
               </div>
@@ -123,7 +123,11 @@ const Searchbar = () => {
           {/* at the end of the search results */}
           <div className="border-t pt-3">
             <p
-              onClick={() => router.push(`/listings?searchTerm=${searchQuery}`)}
+              onClick={() =>
+                router.push(
+                  `/listings?${searchQuery ? `searchTerm=${searchQuery}` : ""}`
+                )
+              }
               className="text-center font-medium text-primary hover:text-primary/80 cursor-pointer transition-colors py-2 rounded-md hover:bg-muted/50"
             >
               View all results

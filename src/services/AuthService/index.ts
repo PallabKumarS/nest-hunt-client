@@ -82,7 +82,6 @@ export const passwordChange = async (userData: FieldValues) => {
     const result = await res.json();
 
     if (result.success) {
-      
     }
 
     return result;
@@ -91,9 +90,9 @@ export const passwordChange = async (userData: FieldValues) => {
   }
 };
 
-// export const logout = async () => {
-//   (await cookies()).delete("accessToken");
-// };
+export const deleteCookie = async () => {
+  (await cookies()).delete("accessToken");
+};
 
 export const getNewToken = async () => {
   try {
