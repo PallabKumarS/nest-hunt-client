@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import LoginForm from "@/components/forms/LoginForm";
 import RegisterForm from "@/components/forms/RegisterForm";
 import {
@@ -24,7 +25,7 @@ const LoginPage = () => {
           <TabsTrigger value="register">Register</TabsTrigger>
         </TabsList>
 
-        {/* login form here  */}
+        {/* Suspense wraps LoginForm to avoid CSR bailout */}
         <TabsContent value="login">
           <Card>
             <CardHeader>
@@ -34,13 +35,14 @@ const LoginPage = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <LoginForm />
+              <Suspense fallback={<div>Loading...</div>}>
+                <LoginForm />
+              </Suspense>
             </CardContent>
           </Card>
         </TabsContent>
-        {/* </CustomForm> */}
 
-        {/* register here  */}
+        {/* Suspense wraps RegisterForm */}
         <TabsContent value="register">
           <Card>
             <CardHeader>
@@ -50,7 +52,9 @@ const LoginPage = () => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <RegisterForm />
+              <Suspense fallback={<div>Loading...</div>}>
+                <RegisterForm />
+              </Suspense>
             </CardContent>
           </Card>
         </TabsContent>

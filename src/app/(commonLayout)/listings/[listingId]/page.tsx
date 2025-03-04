@@ -6,7 +6,7 @@ import { Metadata } from "next";
 export async function generateMetadata({
   params,
 }: {
-  params: { listingId: string };
+  params: Promise<{ listingId: string }>;
 }): Promise<Metadata> {
   const listing = await getSingleListing((await params).listingId);
 
@@ -19,7 +19,7 @@ export async function generateMetadata({
 const ListingDetailsPage = async ({
   params,
 }: {
-  params: { listingId: string };
+  params: Promise<{ listingId: string }>;
 }) => {
   const listingId = (await params).listingId;
   const listing = await getSingleListing(listingId);

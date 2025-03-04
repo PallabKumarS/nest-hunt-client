@@ -31,7 +31,7 @@ const formSchema = z.object({
 });
 
 type listingFormProps = {
-  listing: TListing;
+  listing?: TListing;
   edit?: boolean;
 };
 
@@ -45,11 +45,11 @@ export default function ListingForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       houseLocation: listing?.houseLocation || "",
-      rentPrice: listing.rentPrice || 0,
-      bedroomNumber: listing.bedroomNumber || 0,
-      description: listing.description || "",
-      features: listing.features || "",
-      images: listing.images.map((img) => {
+      rentPrice: listing?.rentPrice || 0,
+      bedroomNumber: listing?.bedroomNumber || 0,
+      description: listing?.description || "",
+      features: listing?.features || "",
+      images: listing?.images.map((img) => {
         return { value: img };
       }) || [{ value: "" }],
     },
@@ -82,7 +82,7 @@ export default function ListingForm({
 
     if (edit) {
       try {
-        const res = await updateListing(listing.listingId as string, data);
+        const res = await updateListing(listing?.listingId as string, data);
         if (res.success) {
           toast.success(res.message, {
             id: toastId,
