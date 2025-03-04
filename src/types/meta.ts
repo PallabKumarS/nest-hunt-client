@@ -1,6 +1,6 @@
-export interface IMeta {
+export type TMeta = {
   page: number;
   limit: number;
-  total: number;
+  totalDoc: number;
   totalPage: number;
-}
+};

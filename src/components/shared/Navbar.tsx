@@ -18,6 +18,7 @@ import { useState } from "react";
 import { logout, userSelector } from "@/redux/features/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { config } from "@/middleware";
+import Searchbar from "./Searchbar";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,7 +37,6 @@ export default function Navbar() {
     if (config.matcher.some((route) => pathname.match(route))) {
       router.push("/login");
     }
-    console.log(pathname);
   };
 
   return (
@@ -50,12 +50,15 @@ export default function Navbar() {
         </div>
 
         {/* Search Bar - Always in main navbar */}
-        <div className="flex-grow max-w-md hidden md:block">
+        {/* <div className="flex-grow max-w-md hidden md:block">
           <input
             type="text"
             placeholder="Search for houses..."
             className="w-full px-4 py-2 rounded-full border border-border focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
+        </div> */}
+        <div className="flex-grow max-w-md hidden md:block z-50">
+          <Searchbar />
         </div>
 
         {/* Desktop Navigation */}
@@ -162,7 +165,7 @@ export default function Navbar() {
             ))}
             {user?.email && (
               <Link
-                href="/create-listing"
+                href="/dashboard/landlord/create-listing"
                 className="block text-muted-foreground hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >

@@ -9,12 +9,17 @@ export const metadata: Metadata = {
     "All Listings with appropriate information and images for the property",
 };
 
-const AllListingsPage = async () => {
-  const listings = await getAllListings();
+const AllListingsPage = async ({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) => {
+  // Get all listings
+  const listings = await getAllListings(await searchParams);
 
   return (
     <Container>
-      <AllListing listings={listings?.data} />
+      <AllListing listings={listings?.data} meta={listings?.meta} />
     </Container>
   );
 };

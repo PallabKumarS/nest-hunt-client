@@ -5,9 +5,12 @@ import { TListing } from "@/types";
 import { revalidateTag } from "next/cache";
 
 // Get all listings
-export const getAllListings = async () => {
+export const getAllListings = async (query: Record<string, unknown>) => {
+  const queryString = new URLSearchParams(
+    query as Record<string, string>
+  ).toString();
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/listings`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/listings?${queryString}`, {
       next: {
         tags: ["listings"],
       },

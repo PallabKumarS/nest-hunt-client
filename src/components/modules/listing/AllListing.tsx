@@ -1,12 +1,14 @@
 import ListingCard from "./ListingCard";
 import NoData from "@/components/shared/NoData";
-import { TListing, TMongoose } from "@/types";
+import { PaginationComponent } from "@/components/shared/Pagination";
+import { TListing, TMeta, TMongoose } from "@/types";
 
 interface AllListingProps {
   listings: (TListing & TMongoose)[];
+  meta: TMeta;
 }
 
-const AllListing = ({ listings }: AllListingProps) => {
+const AllListing = ({ listings, meta }: AllListingProps) => {
   return (
     <div className="space-y-8">
       <div className="space-y-1">
@@ -19,7 +21,7 @@ const AllListing = ({ listings }: AllListingProps) => {
       </div>
 
       {listings?.length > 0 ? (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(290px,100%),1fr))] lg:grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(290px,100%),1fr))] lg:grid-cols-3 gap-4 mb-20">
           {listings.map((listing) => (
             <ListingCard key={listing._id} listing={listing} />
           ))}
@@ -27,6 +29,8 @@ const AllListing = ({ listings }: AllListingProps) => {
       ) : (
         <NoData />
       )}
+
+      <PaginationComponent meta={meta} />
     </div>
   );
 };

@@ -122,14 +122,10 @@ const ListingCard = ({
                 />
                 <ConfirmationBox
                   trigger={
-                    <Button
-                      variant="outline"
-                      onClick={() => onDelete?.(listing.listingId!)}
-                      className="flex-1 hover:bg-red-500 hover:text-white"
-                    >
+                    <p className="flex items-center justify-center px-4 py-2 rounded-md border border-input bg-background text-sm font-medium ring-offset-background transition-colors hover:bg-red-500 hover:text-white flex-1">
                       <Trash className="mr-2 h-4 w-4" />
                       Delete
-                    </Button>
+                    </p>
                   }
                   onConfirm={() => handleDelete(listing.listingId!)}
                 />
