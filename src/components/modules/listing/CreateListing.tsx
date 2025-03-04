@@ -49,9 +49,13 @@ const CreateListing = ({
       </div>
 
       {listings?.length > 0 ? (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(290px,100%),1fr))] lg:grid-cols-3 gap-4 mb-10">
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(min(290px,100%),1fr))] lg:grid-cols-2 2xl:grid-cols-3 gap-4 mb-10">
           {listings?.map((listing) => (
-            <ListingCard key={listing.listingId} listing={listing} />
+            <ListingCard
+              edit={true}
+              key={listing.listingId}
+              listing={listing}
+            />
           ))}
         </div>
       ) : (

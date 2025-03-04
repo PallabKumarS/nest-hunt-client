@@ -22,10 +22,13 @@ export const getAllListings = async () => {
 export const getSingleListing = async (listingId: string) => {
   try {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_API}/listings/:${listingId}`,
+      `${process.env.NEXT_PUBLIC_BASE_API}/listings/${listingId}`,
       {
         next: {
           tags: ["listing"],
+        },
+        headers: {
+          Authorization: await getValidToken(),
         },
       }
     );
@@ -37,16 +40,15 @@ export const getSingleListing = async (listingId: string) => {
 
 // Get all personal listings
 export const getPersonalListings = async () => {
-  const token = await getValidToken();
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/listings/personal`,
       {
         next: {
-          tags: ["listings"],
+          tags: ["PListings"],
         },
         headers: {
-          Authorization: token,
+          Authorization: await getValidToken(),
         },
       }
     );
@@ -71,8 +73,38 @@ export const createListing = async (listingData: TListing): Promise<any> => {
     });
 
     revalidateTag("listings");
+    revalidateTag("PListings");
 
-    return res.json();
+    return await res.json();
+  } catch (error: any) {
+    throw new Error(error.message || "Something went wrong");
+  }
+};
+
+// update listing
+export const updateListing = async (
+  listingId: string,
+  listingData: Partial<TListing>
+): Promise<any> => {
+  const token = await getValidToken();
+
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/listings/${listingId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(listingData),
+        headers: {
+          "Content-type": "application/json",
+          Authorization: token,
+        },
+      }
+    );
+
+    revalidateTag("listings");
+    revalidateTag("PListings");
+
+    return await res.json();
   } catch (error: any) {
     throw new Error(error.message || "Something went wrong");
   }
@@ -80,20 +112,19 @@ export const createListing = async (listingData: TListing): Promise<any> => {
 
 // Delete listing
 export const deleteListing = async (listingId: string): Promise<any> => {
-  const token = await getValidToken();
-
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/listings/${listingId}`,
       {
         method: "DELETE",
         headers: {
-          Authorization: token,
+          Authorization: await getValidToken(),
         },
       }
     );
 
     revalidateTag("listings");
+    revalidateTag("PListings");
     return res.json();
   } catch (error: any) {
     return Error(error);

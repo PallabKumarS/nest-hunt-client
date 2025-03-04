@@ -48,7 +48,7 @@ export const getSingle${capitalize(
 )} = async (${moduleName.toLowerCase()}Id: string) => {
   const token = await getValidToken();
   try {
-    const res = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_API}/${moduleName.toLowerCase()}s/:${moduleName.toLowerCase()}Id\`, {
+    const res = await fetch(\`\${process.env.NEXT_PUBLIC_BASE_API}/${moduleName.toLowerCase()}s/${moduleName.toLowerCase()}Id\`, {
       next: {
         tags: ["${moduleName}"],
       },

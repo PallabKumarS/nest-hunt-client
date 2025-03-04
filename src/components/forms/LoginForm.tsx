@@ -18,8 +18,9 @@ import { PasswordInput } from "../ui/password-input";
 import { useRouter, useSearchParams } from "next/navigation";
 import { loginUser } from "@/services/AuthService";
 import { useAppDispatch } from "@/redux/hook";
+import { getMe } from "@/services/UserService";
+import { Loader2Icon } from "lucide-react";
 import { login } from "@/redux/features/authSlice";
-import { jwtDecode } from "jwt-decode";
 
 const formSchema = z.object({
   email: z.string(),
@@ -45,15 +46,17 @@ export default function LoginForm() {
     try {
       const res = await loginUser(values);
       if (res?.success) {
-        console.log(res);
-        const user = jwtDecode(res?.data?.accessToken);
-        console.log(user);
-        dispatch(login(user));
+        const user = await getMe();
+        if (user?.success) {
+          dispatch(login(user?.data));
+        } else {
+          toast.error(user?.message, { id: toastId });
+        }
         toast.success(res?.message, { id: toastId });
         if (redirectPath) {
           router.push(redirectPath);
         } else {
-          router.push("/dashboard");
+          router.push("/dashboard/profile");
         }
       } else {
         toast.error(res?.message, { id: toastId });
@@ -109,7 +112,9 @@ export default function LoginForm() {
           )}
         />
 
-        <Button variant={"outline"}>{isSubmitting ? "Logging..." : "Login"}</Button>
+        <Button variant={"outline"}>
+          {isSubmitting ? <Loader2Icon /> : "Login"}
+        </Button>
       </form>
     </Form>
   );

@@ -8,7 +8,7 @@ const authRoutes = ["/login", "/register"];
 const roleBasedPrivateRoutes = {
   admin: [/^\/admin/],
   landlord: [/^\/landlord/, /^\/create-listing/],
-  tenant: [/^\/tenant/, /^\/listings/],
+  tenant: [/^\/tenant/],
 };
 
 export const middleware = async (req: NextRequest) => {
@@ -25,6 +25,10 @@ export const middleware = async (req: NextRequest) => {
     }
   }
 
+  if (pathname.startsWith("/dashboard")) {
+    return NextResponse.next();
+  }
+
   if (userInfo?.role && roleBasedPrivateRoutes[userInfo?.role as Role]) {
     const routes = roleBasedPrivateRoutes[userInfo?.role as Role];
     if (routes.some((route) => pathname.match(route))) {
@@ -36,5 +40,16 @@ export const middleware = async (req: NextRequest) => {
 };
 
 export const config = {
-  matcher: ["/create-shop", "/admin", "/admin/:page", "/user", "/user/:page"],
+  matcher: [
+    "/create-listing",
+    "/admin",
+    "/admin/:path*",
+    "/tenant",
+    "/tenant/:path*",
+    "/landlord",
+    "/landlord/:path*",
+    "/listings/:listingId",
+    "/dashboard",
+    "/dashboard/:path*",
+  ],
 };

@@ -36,17 +36,18 @@ export default function Navbar() {
     if (config.matcher.some((route) => pathname.match(route))) {
       router.push("/login");
     }
+    console.log(pathname);
   };
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
       <nav className="container mx-auto px-4 pb-2 lg:h-16 flex items-center justify-center lg:justify-between gap-4 flex-wrap lg:flex-nowrap">
         {/* Logo */}
-        <Link href="/" className="flex-shrink-0">
+        <div onClick={() => router.push("/")} className="flex-shrink-0">
           <h1 className="text-2xl font-black">
             <span className="text-gradient">Nest Hunt</span>
           </h1>
-        </Link>
+        </div>
 
         {/* Search Bar - Always in main navbar */}
         <div className="flex-grow max-w-md hidden md:block">
@@ -90,11 +91,15 @@ export default function Navbar() {
                 <DropdownMenuContent align="end">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href={`/${user?.role}/dashboard`}>Dashboard</Link>
+                    <Link href={`/dashboard/profile`}>Profile</Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href={`/dashboard/${user?.role}`}>Dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href={`/dashboard/settings`}>Settings</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-red-500"

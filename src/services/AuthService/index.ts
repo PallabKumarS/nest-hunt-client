@@ -1,5 +1,6 @@
 "use server";
 
+import { getValidToken } from "@/lib/verifyToken";
 import { jwtDecode } from "jwt-decode";
 import { cookies } from "next/headers";
 import { FieldValues } from "react-hook-form";
@@ -61,6 +62,32 @@ export const getCurrentUser = async () => {
     return decodedData;
   } else {
     return null;
+  }
+};
+
+export const passwordChange = async (userData: FieldValues) => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/auth/change-password`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: await getValidToken(),
+        },
+        body: JSON.stringify(userData),
+      }
+    );
+
+    const result = await res.json();
+
+    if (result.success) {
+      
+    }
+
+    return result;
+  } catch (error: any) {
+    throw new Error(error.message || "Something went wrong");
   }
 };
 

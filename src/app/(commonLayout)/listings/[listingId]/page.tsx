@@ -1,21 +1,34 @@
+import ListingDetails from "@/components/modules/listing/ListingDetails";
 import Container from "@/components/shared/Container";
 import { getSingleListing } from "@/services/ListingService";
 import { Metadata } from "next";
 
-const listingFetch = async (listingId: string) => {
-  return await getSingleListing(listingId);
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: { listingId: string };
+}): Promise<Metadata> {
+  const listing = await getSingleListing((await params).listingId);
 
-export const metadata: Metadata = {
-  title: "NH || Listing Details",
-  description:
-    "Listing Details with appropriate information and images for the property",
-};
+  return {
+    title: `NH || ${listing?.data?.houseLocation}`,
+    description: listing?.data?.description,
+  };
+}
 
-const ListingDetailsPage = () => {
+const ListingDetailsPage = async ({
+  params,
+}: {
+  params: { listingId: string };
+}) => {
+  const listingId = (await params).listingId;
+  const listing = await getSingleListing(listingId);
+
+  console.log(listing);
+
   return (
     <Container>
-      <h1>This is ListingDetailsPage Component</h1>
+      <ListingDetails listing={listing?.data} />
     </Container>
   );
 };

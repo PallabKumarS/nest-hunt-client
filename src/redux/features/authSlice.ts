@@ -3,22 +3,25 @@ import { RootState } from "../store";
 
 interface IInitialState {
   user: {
+    role: "admin" | "tenant" | "landlord";
+    phone?: string;
+    address?: string;
+    passwordChangedAt?: Date;
+    isDeleted: boolean;
+    isActive: boolean;
+    profileImage?: string;
+    name: string;
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    __v: number;
     userId: string;
     email: string;
-    role: string;
-    iat: number;
-    exp: number;
   } | null;
 }
 
 const initialState: IInitialState = {
-  user: {
-    userId: "",
-    email: "",
-    role: "",
-    iat: 0,
-    exp: 0,
-  },
+  user: null,
 };
 
 const authSlice = createSlice({

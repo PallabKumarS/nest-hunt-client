@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 import { PasswordInput } from "../ui/password-input";
 import { registerUser } from "@/services/AuthService";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { LoaderCircleIcon } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string(),
@@ -182,7 +183,7 @@ export default function RegisterForm() {
           disabled={!!(passwordConfirm && password !== passwordConfirm)}
           type="submit"
         >
-          {isSubmitting ? "Registering..." : "Register"}
+          {isSubmitting ? <LoaderCircleIcon /> : "Register"}
         </Button>
       </form>
     </Form>

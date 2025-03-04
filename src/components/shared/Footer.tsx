@@ -1,7 +1,12 @@
+"use client";
+
 import { Facebook, Instagram, X, Mail, Phone, MapPin } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const Footer = () => {
+  const router = useRouter();
+
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/about", label: "About Us" },
@@ -20,15 +25,20 @@ const Footer = () => {
 
   return (
     <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex flex-col px-4 py-16 mx-auto md:py-24">
+      <div className="container flex flex-col px-4 py-16 mx-auto md:py-12">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand Section */}
           <div className="space-y-4 mx-auto text-center">
-            <Link href="/" className="transition-transform hover:scale-105">
+            <div
+              onClick={() => {
+                router.push("/");
+              }}
+              className="transition-transform hover:scale-105"
+            >
               <h1 className="text-2xl font-black">
                 <span className="text-gradient">Nest Hunt</span>
               </h1>
-            </Link>
+            </div>
             <p className="text-muted-foreground">
               Your trusted partner in finding the perfect home.
             </p>

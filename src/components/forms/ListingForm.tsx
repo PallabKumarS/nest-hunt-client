@@ -15,10 +15,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus } from "lucide-react";
-import { createListing } from "@/services/ListingService";
+import { Loader2Icon, Plus } from "lucide-react";
+import { createListing, updateListing } from "@/services/ListingService";
 import { useAppSelector } from "@/redux/hook";
 import { userSelector } from "@/redux/features/authSlice";
+import { TListing } from "@/types";
 
 const formSchema = z.object({
   houseLocation: z.string().min(1),
@@ -29,18 +30,28 @@ const formSchema = z.object({
   images: z.array(z.object({ value: z.string().min(1) })),
 });
 
-export default function ListingForm() {
+type listingFormProps = {
+  listing: TListing;
+  edit?: boolean;
+};
+
+export default function ListingForm({
+  listing,
+  edit = false,
+}: listingFormProps) {
   const user = useAppSelector(userSelector);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      houseLocation: "",
-      rentPrice: 0,
-      bedroomNumber: 0,
-      description: "",
-      features: "",
-      images: [{ value: "" }],
+      houseLocation: listing?.houseLocation || "",
+      rentPrice: listing.rentPrice || 0,
+      bedroomNumber: listing.bedroomNumber || 0,
+      description: listing.description || "",
+      features: listing.features || "",
+      images: listing.images.map((img) => {
+        return { value: img };
+      }) || [{ value: "" }],
     },
   });
 
@@ -58,7 +69,9 @@ export default function ListingForm() {
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const toastId = toast.loading("Creating listing...");
+    const toastId = toast.loading(
+      edit ? "Updating listing..." : "Creating listing..."
+    );
     const images = values.images.map((image) => image.value);
 
     const data = {
@@ -67,21 +80,40 @@ export default function ListingForm() {
       landlordId: user?.userId as string,
     };
 
-    try {
-      const res = await createListing(data);
-      if (res.success) {
-        toast.success(res.message, {
-          id: toastId,
-        });
-        form.reset();
-      } else {
-        toast.error(res.message, {
-          id: toastId,
-        });
+    if (edit) {
+      try {
+        const res = await updateListing(listing.listingId as string, data);
+        if (res.success) {
+          toast.success(res.message, {
+            id: toastId,
+          });
+          form.reset();
+        } else {
+          toast.error(res.message, {
+            id: toastId,
+          });
+        }
+      } catch (error) {
+        console.error("Form submission error", error);
+        toast.error("Failed to submit the form. Please try again.");
       }
-    } catch (error) {
-      console.error("Form submission error", error);
-      toast.error("Failed to submit the form. Please try again.");
+    } else {
+      try {
+        const res = await createListing(data);
+        if (res.success) {
+          toast.success(res.message, {
+            id: toastId,
+          });
+          form.reset();
+        } else {
+          toast.error(res.message, {
+            id: toastId,
+          });
+        }
+      } catch (error) {
+        console.error("Form submission error", error);
+        toast.error("Failed to submit the form. Please try again.");
+      }
     }
   }
 
@@ -245,7 +277,7 @@ export default function ListingForm() {
           type="submit"
           disabled={imageFields.length === 0}
         >
-          {isSubmitting ? "Submitting..." : "Submit"}
+          {isSubmitting ? <Loader2Icon /> : edit ? "Update" : "Submit"}
         </Button>
       </form>
     </Form>
