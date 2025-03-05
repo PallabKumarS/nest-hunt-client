@@ -9,6 +9,7 @@ import { formatDistance } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/hook";
 import { userSelector } from "@/redux/features/authSlice";
+import Link from "next/link";
 
 interface ListingDetailsProps {
   listing: TListing & TMongoose;
@@ -16,6 +17,23 @@ interface ListingDetailsProps {
 
 const ListingDetails = ({ listing }: ListingDetailsProps) => {
   const user = useAppSelector(userSelector);
+
+  if (!listing) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
+        <div className="text-4xl">🏠</div>
+        <h2 className="text-2xl font-semibold text-gray-800">
+          No Listing Found
+        </h2>
+        <p className="text-gray-600">
+          This listing may have been removed or is no longer available.
+        </p>
+        <Link href="/listings" className="text-primary hover:underline">
+          Browse other listings
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <motion.div

@@ -3,7 +3,7 @@ import Container from "@/components/shared/Container";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "NH || Settings",
+  title: "Dashboard || Settings",
   description: "Settings page for the user to update their profile information",
 };
 

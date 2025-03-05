@@ -38,7 +38,7 @@
   --input: hsla(82, 17%, 75%, 0.815); /* input field border color  */
   --ring: hsl(73, 67%, 54%); /* selected border color  */
   --radius: 0.75rem;
-  --chart-1: hsl(17, 70%, 55%);
+  --chart-1: hsl(48,100%,96%);
   --chart-2: hsl(170, 60%, 45%);
   --chart-3: hsl(0, 70%, 50%);
   --chart-4: hsl(280, 60%, 55%);
@@ -73,7 +73,7 @@
   --border: hsl(225, 20%, 25%);
   --input: hsl(225, 20%, 25%);
   --ring: hsl(210, 65%, 55%);
-  --chart-1: hsl(210, 70%, 60%);
+  --chart-1: hsl(209, 61%, 11%);
   --chart-2: hsl(170, 60%, 50%);
   --chart-3: hsl(45, 70%, 55%);
   --chart-4: hsl(280, 60%, 60%);

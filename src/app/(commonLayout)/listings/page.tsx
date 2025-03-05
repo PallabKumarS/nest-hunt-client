@@ -14,8 +14,13 @@ const AllListingsPage = async ({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) => {
+  const enhancedSearchParams = {
+    ...(await searchParams),
+    isDeleted: "false",
+  };
+
   // Get all listings
-  const listings = await getAllListings(await searchParams);
+  const listings = await getAllListings(enhancedSearchParams);
 
   return (
     <Container className="">

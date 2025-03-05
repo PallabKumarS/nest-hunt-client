@@ -11,6 +11,7 @@ import {
   Plus,
   ChevronUp,
   LogIn,
+  HomeIcon,
 } from "lucide-react";
 
 import {
@@ -39,9 +40,19 @@ import { deleteCookie } from "@/services/AuthService";
 // common routes for all users
 const items = [
   {
+    title: "Home",
+    icon: HomeIcon,
+    href: "/",
+  },
+  {
+    title: "All Rentals",
+    icon: Building,
+    href: "/listings",
+  },
+  {
     title: "Profile",
     icon: User,
-    href: "/profile",
+    href: `/dashboard/profile`,
   },
   {
     title: "Settings",
@@ -55,12 +66,12 @@ const adminRoutes = [
   {
     title: "Users",
     icon: Users,
-    href: "/admin/users",
+    href: "/dashboard/admin/user-management",
   },
   {
     title: "Properties",
     icon: Building,
-    href: "/admin/properties",
+    href: "/dashboard/admin/listing-management",
   },
 ];
 
@@ -83,7 +94,7 @@ const tenantRoutes = [
   {
     title: "My Rentals",
     icon: Key,
-    href: "/dashboard/tenant/",
+    href: "/dashboard/tenant/requests",
   },
   {
     title: "Applications",

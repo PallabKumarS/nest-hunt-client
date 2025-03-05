@@ -8,7 +8,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bed, MapPin, Check, X, Eye, Edit, Trash } from "lucide-react";
+import { Bed, MapPin, Check, X, Eye, Edit, Trash, Ban } from "lucide-react";
 import Link from "next/link";
 import { TListing, TMongoose } from "@/types";
 import ImageSlider from "@/components/shared/ImageSlider";
@@ -132,6 +132,15 @@ const ListingCard = ({
               </>
             )}
           </div>
+
+          {listing?.isDeleted && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+              <span className="flex items-center gap-2 text-red-600 font-medium">
+                <Ban className="w-4 h-4" />
+                This listing has been marked for deletion
+              </span>
+            </div>
+          )}
         </CardFooter>
       </Card>
     </motion.div>

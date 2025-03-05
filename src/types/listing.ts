@@ -5,8 +5,8 @@ export type TListing = {
   bedroomNumber: number;
   images: string[];
   landlordId: string;
-  isAvailable?: boolean;
-  listingId?: string;
+  isAvailable: boolean;
+  listingId: string;
   features?: string;
-  isDeleted?: boolean;
+  isDeleted: boolean;
 };

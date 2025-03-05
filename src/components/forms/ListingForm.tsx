@@ -19,7 +19,7 @@ import { Loader2Icon, Plus } from "lucide-react";
 import { createListing, updateListing } from "@/services/ListingService";
 import { useAppSelector } from "@/redux/hook";
 import { userSelector } from "@/redux/features/authSlice";
-import { TListing } from "@/types";
+import { TListing, TMongoose } from "@/types";
 
 const formSchema = z.object({
   houseLocation: z.string().min(1),
@@ -31,7 +31,7 @@ const formSchema = z.object({
 });
 
 type listingFormProps = {
-  listing?: TListing;
+  listing?: TListing & TMongoose;
   edit?: boolean;
 };
 
@@ -121,7 +121,7 @@ export default function ListingForm({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 max-w-3xl mx-auto py-10"
+        className="space-y-8 max-w-3xl mx-auto py-10 overflow-y-auto"
       >
         {/* house location field  */}
         <FormField

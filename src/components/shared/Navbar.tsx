@@ -43,7 +43,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-30 mt-2">
+    <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-30 pt-2">
       <nav className="container mx-auto px-4 pb-2 lg:h-16 flex items-center justify-center lg:justify-between gap-4 flex-wrap lg:flex-nowrap">
         {/* Logo */}
         <div onClick={() => router.push("/")} className="flex-shrink-0">
@@ -94,7 +94,7 @@ export default function Navbar() {
                     <Link href={`/dashboard/profile`}>Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href={`/dashboard/${user?.role}`}>Dashboard</Link>
+                    <Link href={`/dashboard/profile`}>Dashboard</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Link href={`/dashboard/settings`}>Settings</Link>

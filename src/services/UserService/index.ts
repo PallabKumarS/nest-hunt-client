@@ -5,16 +5,25 @@ import { TUser } from "@/types";
 import { revalidateTag } from "next/cache";
 
 // Get all users
-export const getAllUsers = async () => {
+export const getAllUsers = async (
+  query: Record<string, unknown>
+): Promise<any> => {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/users`, {
-      next: {
-        tags: ["users"],
-      },
-      headers: {
-        Authorization: await getValidToken(),
-      },
-    });
+    const queryString = new URLSearchParams(
+      query as Record<string, string>
+    ).toString();
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/users?${queryString}`,
+      {
+        next: {
+          tags: ["users"],
+        },
+        headers: {
+          Authorization: await getValidToken(),
+        },
+      }
+    );
     return await res.json();
   } catch (error: any) {
     return Error(error.message);
@@ -22,7 +31,7 @@ export const getAllUsers = async () => {
 };
 
 // Get single user
-export const getSingleUser = async (userId: string) => {
+export const getSingleUser = async (userId: string): Promise<any> => {
   const token = await getValidToken();
   try {
     const res = await fetch(
@@ -43,7 +52,7 @@ export const getSingleUser = async (userId: string) => {
 };
 
 // Get myself
-export const getMe = async () => {
+export const getMe = async (): Promise<any> => {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_API}/users/me`, {
       next: {
@@ -62,7 +71,10 @@ export const getMe = async () => {
 };
 
 // Update user
-export const updateUser = async (userId: string, userData: Partial<TUser>) => {
+export const updateUser = async (
+  userId: string,
+  userData: Partial<TUser>
+): Promise<any> => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/users/${userId}`,
@@ -87,13 +99,13 @@ export const updateUser = async (userId: string, userData: Partial<TUser>) => {
 };
 
 // Update user status
-export const updateUserStatus = async (userId: string, status: string) => {
+export const updateUserStatus = async (userId: string): Promise<any> => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/users/status/${userId}`,
       {
         method: "PATCH",
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({}),
         headers: {
           "Content-type": "application/json",
           Authorization: await getValidToken(),
@@ -102,6 +114,8 @@ export const updateUserStatus = async (userId: string, status: string) => {
     );
 
     revalidateTag("users");
+    revalidateTag("me");
+    revalidateTag("user");
 
     return await res.json();
   } catch (error: any) {
@@ -110,7 +124,10 @@ export const updateUserStatus = async (userId: string, status: string) => {
 };
 
 // Update user role
-export const updateUserRole = async (userId: string, role: string) => {
+export const updateUserRole = async (
+  userId: string,
+  role: string
+): Promise<any> => {
   try {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/users/role/${userId}`,
@@ -125,6 +142,8 @@ export const updateUserRole = async (userId: string, role: string) => {
     );
 
     revalidateTag("users");
+    revalidateTag("me");
+    revalidateTag("user");
 
     return await res.json();
   } catch (error: any) {

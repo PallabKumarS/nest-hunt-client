@@ -14,7 +14,7 @@ export const getAllListings = async (query: Record<string, unknown>) => {
       `${process.env.NEXT_PUBLIC_BASE_API}/listings?${queryString}`,
       {
         next: {
-          tags: ["listings"],
+          tags: ["listing"],
         },
       }
     );
@@ -65,7 +65,9 @@ export const getPersonalListings = async () => {
 };
 
 // Create listing
-export const createListing = async (listingData: TListing): Promise<any> => {
+export const createListing = async (
+  listingData: Partial<TListing>
+): Promise<any> => {
   const token = await getValidToken();
 
   try {
@@ -107,9 +109,34 @@ export const updateListing = async (
         },
       }
     );
+    revalidateTag("listings");
+    revalidateTag("PListings");
+    revalidateTag("listing");
+
+    return await res.json();
+  } catch (error: any) {
+    throw new Error(error.message || "Something went wrong");
+  }
+};
+
+// Update listing status
+export const updateListingStatus = async (listingId: string): Promise<any> => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/listings/status/${listingId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({}),
+        headers: {
+          "Content-type": "application/json",
+          Authorization: await getValidToken(),
+        },
+      }
+    );
 
     revalidateTag("listings");
     revalidateTag("PListings");
+    revalidateTag("listing");
 
     return await res.json();
   } catch (error: any) {

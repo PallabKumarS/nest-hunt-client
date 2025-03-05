@@ -24,8 +24,6 @@ const ListingDetailsPage = async ({
   const listingId = (await params).listingId;
   const listing = await getSingleListing(listingId);
 
-  console.log(listing);
-
   return (
     <Container>
       <ListingDetails listing={listing?.data} />
