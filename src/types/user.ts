@@ -3,9 +3,8 @@ export type TUser = {
   name: string;
   email: string;
   role: "admin" | "tenant" | "landlord";
-  phone: string;
-  address: string;
-  password: string;
+  phone?: string;
+  address?: string;
   passwordChangedAt?: Date;
   isDeleted: boolean;
   isActive: boolean;

@@ -1,39 +1,43 @@
 "use client";
 
-import { TListing, TMongoose } from "@/types";
+import { TListing, TMongoose, TRequest } from "@/types";
 import { motion } from "framer-motion";
 import ImageSlider from "@/components/shared/ImageSlider";
 import { Badge } from "@/components/ui/badge";
-import { Bed, MapPin, Check, Calendar } from "lucide-react";
+import { Bed, MapPin, Check, Calendar, ReceiptTextIcon } from "lucide-react";
 import { formatDistance } from "date-fns";
-import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/redux/hook";
 import { userSelector } from "@/redux/features/authSlice";
-import Link from "next/link";
+import { Modal } from "@/components/shared/Modal";
+import RequestForm from "@/components/forms/RequestForm";
+import { useEffect, useState } from "react";
+import { getPersonalRequests } from "@/services/RequestService";
 
 interface ListingDetailsProps {
   listing: TListing & TMongoose;
 }
 
 const ListingDetails = ({ listing }: ListingDetailsProps) => {
+  const [isMatched, setIsMatched] = useState<boolean>(false);
   const user = useAppSelector(userSelector);
 
-  if (!listing) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
-        <div className="text-4xl">🏠</div>
-        <h2 className="text-2xl font-semibold text-gray-800">
-          No Listing Found
-        </h2>
-        <p className="text-gray-600">
-          This listing may have been removed or is no longer available.
-        </p>
-        <Link href="/listings" className="text-primary hover:underline">
-          Browse other listings
-        </Link>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const getRequests = async () => {
+      const requests = await getPersonalRequests();
+
+      const filteredRequests = requests?.data?.filter(
+        (request: TRequest) => request.listingId.listingId === listing.listingId
+      );
+
+      const isMatched = filteredRequests?.some(
+        (request: TRequest) => request.tenantId.userId === user?.userId
+      );
+
+      setIsMatched(isMatched);
+    };
+
+    getRequests();
+  }, [listing.listingId, user?.userId]);
 
   return (
     <motion.div
@@ -133,20 +137,29 @@ const ListingDetails = ({ listing }: ListingDetailsProps) => {
         {user?.role === "tenant" ? (
           <>
             {listing.isAvailable ? (
-              <motion.div
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Button
-                  size="lg"
-                  className="w-full bg-primary text-white hover:bg-primary/90 mx-auto"
-                  onClick={() => {
-                    console.log("Request to Rent");
-                  }}
+              isMatched ? (
+                <div className="rounded-xl border bg-muted p-4 mx-auto text-center">
+                  <p className="text-lg font-medium text-muted-foreground text-center">
+                    You have already requested to rent this property.
+                  </p>
+                </div>
+              ) : (
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                 >
-                  Request to Rent
-                </Button>
-              </motion.div>
+                  <Modal
+                    trigger={
+                      <p className="w-full py-3 px-4 text-center bg-primary text-white hover:bg-primary/90 rounded-md cursor-pointer transition-colors font-medium flex items-center justify-center gap-2">
+                        <ReceiptTextIcon className="h-5 w-5" />
+                        Request to Rent
+                      </p>
+                    }
+                    content={<RequestForm user={user} listing={listing} />}
+                    title="Request to Rent"
+                  />
+                </motion.div>
+              )
             ) : (
               <div className="rounded-xl border bg-muted p-4 mx-auto text-center">
                 <p className="text-lg font-medium text-muted-foreground text-center">

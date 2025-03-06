@@ -23,8 +23,8 @@ export function PaginationComponent({ meta }: { meta: TMeta }) {
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            onClick={() => handlePagination(meta.page - 1)}
-            className={meta.page <= 1 ? "pointer-events-none opacity-50" : ""}
+            onClick={() => handlePagination(meta?.page - 1)}
+            className={meta?.page <= 1 ? "pointer-events-none opacity-50" : ""}
           />
         </PaginationItem>
 
@@ -45,7 +45,7 @@ export function PaginationComponent({ meta }: { meta: TMeta }) {
           <PaginationNext
             onClick={() => handlePagination(meta.page + 1)}
             className={
-              meta.page >= meta.totalPage
+              meta?.page >= meta?.totalPage
                 ? "pointer-events-none opacity-50"
                 : ""
             }

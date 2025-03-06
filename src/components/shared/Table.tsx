@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 "use client";
 
 import {
@@ -15,12 +16,18 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Ban, Edit, Eye, Trash2 } from "lucide-react";
-import { TMeta, TMongoose } from "@/types";
+import { Ban, Edit, Eye, MapPin, Trash2 } from "lucide-react";
+import { TMeta, TMongoose, TRequest, TTransaction, TUser } from "@/types";
 import { PaginationComponent } from "./Pagination";
 import ConfirmationBox from "./ConfirmationBox";
 import { Button } from "../ui/button";
 import NoData from "./NoData";
+import Link from "next/link";
+import { useAppSelector } from "@/redux/hook";
+import { userSelector } from "@/redux/features/authSlice";
+import { usePathname, useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { createPayment } from "@/services/RequestService";
 
 type TTableProps<T> = {
   data: (T & TMongoose)[];
@@ -47,6 +54,35 @@ export function TableComponent<T>({
   onStatusChange,
   onRoleChange,
 }: TTableProps<T>) {
+  const user = useAppSelector(userSelector);
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleCreatePayment = async (item: TRequest & TMongoose) => {
+    const toastId = toast.loading("Creating payment...");
+    try {
+      const res = await createPayment(item.requestId);
+
+      if (res.success) {
+        toast.success(res.message, {
+          id: toastId,
+        });
+
+        setTimeout(() => {
+          window.open(res?.data?.transaction?.paymentUrl, "_blank");
+        }, 1000);
+      } else {
+        toast.error(res.message, {
+          id: toastId,
+        });
+      }
+    } catch (error) {
+      toast.error("Error creating payment", {
+        id: toastId,
+      });
+    }
+  };
+
   if (!data || data.length === 0) {
     return <NoData />;
   }
@@ -59,6 +95,8 @@ export function TableComponent<T>({
             {caption}
           </TableCaption>
         )}
+
+        {/* headers here  */}
         <TableHeader>
           <TableRow className="bg-gray-100 dark:bg-gray-800">
             {heads.map((head, index) => (
@@ -76,6 +114,8 @@ export function TableComponent<T>({
             ))}
           </TableRow>
         </TableHeader>
+
+        {/* table data here  */}
         <TableBody>
           {data.map((item) => (
             <TableRow
@@ -95,8 +135,11 @@ export function TableComponent<T>({
                     item[prop],
                     prop,
                     item,
+                    user,
                     onStatusChange,
-                    onRoleChange
+                    onRoleChange,
+                    handleCreatePayment,
+                    router
                   )}
                 </TableCell>
               ))}
@@ -104,16 +147,28 @@ export function TableComponent<T>({
               {/* actions cell  */}
               <TableCell className="flex items-center justify-center gap-2">
                 {/* view action  */}
-                {onView && (
-                  <Button
-                    onClick={() => onView && onView(item)}
-                    size="sm"
-                    variant="outline"
-                    className="flex items-center justify-center hover:bg-blue-500 hover:text-white"
-                  >
-                    <Eye className="h-4 w-4 text-blue-500" />
-                  </Button>
-                )}
+                {pathname.includes("requests")
+                  ? user?.role === "tenant" &&
+                    onView && (
+                      <Button
+                        onClick={() => onView && onView(item)}
+                        size="sm"
+                        variant="outline"
+                        className="flex items-center justify-center hover:bg-blue-500 hover:text-white"
+                      >
+                        <Eye className="h-4 w-4 text-blue-500" />
+                      </Button>
+                    )
+                  : onView && (
+                      <Button
+                        onClick={() => onView && onView(item)}
+                        size="sm"
+                        variant="outline"
+                        className="flex items-center justify-center hover:bg-blue-500 hover:text-white"
+                      >
+                        <Eye className="h-4 w-4 text-blue-500" />
+                      </Button>
+                    )}
 
                 {/* edit action  */}
                 {onEdit && !(item as any)?.isDeleted && (
@@ -128,19 +183,36 @@ export function TableComponent<T>({
                 )}
 
                 {/* delete action  */}
-                {onDelete && !(item as any)?.isDeleted && (
-                  <ConfirmationBox
-                    trigger={
-                      <p
-                        className="flex items-center justify-center py-1 px-2 rounded-sm border border-input bg-background text-xs font-medium ring-offset-background transition-colors hover:bg-red-500 hover:text-white flex-1
+                {pathname.includes("requests")
+                  ? onDelete &&
+                    user?.role !== "tenant" &&
+                    !(item as any)?.isDeleted && (
+                      <ConfirmationBox
+                        trigger={
+                          <p
+                            className="flex items-center justify-center py-1 px-2 rounded-sm border border-input bg-background text-xs font-medium ring-offset-background transition-colors hover:bg-red-500 hover:text-white flex-1
 "
-                      >
-                        <Trash2 className="h-5 w-5 text-red-500" />
-                      </p>
-                    }
-                    onConfirm={() => onDelete && onDelete(item)}
-                  />
-                )}
+                          >
+                            <Trash2 className="h-5 w-5 text-red-500" />
+                          </p>
+                        }
+                        onConfirm={() => onDelete && onDelete(item)}
+                      />
+                    )
+                  : onDelete &&
+                    !(item as any)?.isDeleted && (
+                      <ConfirmationBox
+                        trigger={
+                          <p
+                            className="flex items-center justify-center py-1 px-2 rounded-sm border border-input bg-background text-xs font-medium ring-offset-background transition-colors hover:bg-red-500 hover:text-white flex-1
+"
+                          >
+                            <Trash2 className="h-5 w-5 text-red-500" />
+                          </p>
+                        }
+                        onConfirm={() => onDelete && onDelete(item)}
+                      />
+                    )}
               </TableCell>
             </TableRow>
           ))}
@@ -158,8 +230,11 @@ function formatCellContent<T>(
   content: any,
   prop: string | number | symbol,
   item: any,
+  user: TUser | null,
   onStatusChange?: (data: T & TMongoose, status?: string) => void,
-  onRoleChange?: (user: T & TMongoose, role: string) => void
+  onRoleChange?: (user: T & TMongoose, role: string) => void,
+  handleCreatePayment?: (item: TRequest & TMongoose) => void,
+  router?: any
 ): React.ReactNode {
   if (item.isDeleted) {
     return (
@@ -277,6 +352,161 @@ function formatCellContent<T>(
 
     if (content instanceof Date) {
       return content.toLocaleDateString();
+    }
+
+    // For request status
+    if (prop === "status") {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            className={`px-2 py-1 rounded-md ${
+              content === "approved"
+                ? "bg-green-100 text-green-600"
+                : content === "pending"
+                ? "bg-yellow-100 text-yellow-600"
+                : "bg-red-100 text-red-600"
+            }`}
+          >
+            {content[0].toUpperCase() + content.slice(1)}
+          </DropdownMenuTrigger>
+
+          {/* for landlord role  */}
+          {user?.role === "landlord" && (
+            <DropdownMenuContent className="">
+              <DropdownMenuItem
+                disabled={content === "approved" || content === "paid"}
+                onClick={() =>
+                  onStatusChange && onStatusChange(item, "approved")
+                }
+              >
+                Approve
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={content === "pending" || content === "paid"}
+                onClick={() =>
+                  onStatusChange && onStatusChange(item, "pending")
+                }
+              >
+                Pending
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={content === "rejected" || content === "paid"}
+                onClick={() =>
+                  onStatusChange && onStatusChange(item, "rejected")
+                }
+              >
+                Reject
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
+
+          {/* for admin role  */}
+          {user?.role === "admin" && (
+            <DropdownMenuContent className="">
+              <DropdownMenuItem
+                disabled={content === "approved" || content === "paid"}
+                onClick={() =>
+                  onStatusChange && onStatusChange(item, "approved")
+                }
+              >
+                Approve
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={content === "pending" || content === "paid"}
+                onClick={() =>
+                  onStatusChange && onStatusChange(item, "pending")
+                }
+              >
+                Pending
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                disabled={content === "rejected" || content === "paid"}
+                onClick={() =>
+                  onStatusChange && onStatusChange(item, "rejected")
+                }
+              >
+                Reject
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          )}
+        </DropdownMenu>
+      );
+    }
+
+    // For transaction status
+    if (prop === "transaction") {
+      return item?.status !== "rejected" && user?.role === "tenant" ? (
+        // <Link href={`${item?.status === "paid" ? "" : content.paymentUrl}`}>
+        <Button
+          onClick={() => {
+            item?.status !== "paid" &&
+              item?.status !== "rejected" &&
+              handleCreatePayment &&
+              handleCreatePayment(item);
+            item?.status !== "paid" &&
+              item?.status !== "rejected" &&
+              router &&
+              router.push(item?.status === "paid" ? "" : content.paymentUrl);
+          }}
+          size={"sm"}
+          variant={
+            item?.status !== "paid" && item?.status !== "rejected"
+              ? "link"
+              : "default"
+          }
+          className="py-1 rounded-md bg-green-200 text-green-600 hover:bg-amber-50 dark:hover:bg-blue-950"
+        >
+          {item?.status === "paid"
+            ? content.paymentId
+            : item?.status === "cancelled"
+            ? "Payment Link"
+            : "-"}
+        </Button>
+      ) : (
+        // </Link>
+        <p className="py-1 rounded-md  bg-red-300 text-red-600">-</p>
+      );
+    }
+
+    // For user IDs (landlord and tenant)
+    if (prop === "landlordId") {
+      return (
+        <div className="flex flex-wrap justify-center items-center space-x-2">
+          <span className="text-primary font-semibold">
+            {content.name || "Landlord"}
+          </span>
+          <span className="text-xs text-gray-500">({content.email})</span>
+        </div>
+      );
+    }
+
+    // For user IDs (tenant)
+    if (prop === "tenantId") {
+      return (
+        <div className="flex flex-wrap justify-center items-center mt-auto space-x-2">
+          <span className="text-primary font-semibold">
+            {content.name || "Tenant"}
+          </span>
+          <span className="text-xs text-gray-500">({content.email})</span>
+        </div>
+      );
+    }
+
+    // for listing id only
+    if (prop === "listingId") {
+      return (
+        <div className="flex flex-wrap justify-center items-center space-x-2">
+          <MapPin className="w-4 h-4 text-primary" />
+          <div>
+            <p className="text-primary font-semibold">
+              {content.houseLocation}
+            </p>
+            <p className="text-xs text-gray-500">
+              {content.bedroomNumber} Bedrooms | ${content.rentPrice}/month
+            </p>
+          </div>
+        </div>
+      );
     }
 
     return content;

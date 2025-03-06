@@ -1,7 +1,6 @@
 "use server";
 
 import { getValidToken } from "@/lib/verifyToken";
-import { TListing } from "@/types";
 import { revalidateTag } from "next/cache";
 
 // Get all listings
@@ -65,9 +64,7 @@ export const getPersonalListings = async () => {
 };
 
 // Create listing
-export const createListing = async (
-  listingData: Partial<TListing>
-): Promise<any> => {
+export const createListing = async (listingData: any): Promise<any> => {
   const token = await getValidToken();
 
   try {
@@ -93,7 +90,7 @@ export const createListing = async (
 // update listing
 export const updateListing = async (
   listingId: string,
-  listingData: Partial<TListing>
+  listingData: any
 ): Promise<any> => {
   const token = await getValidToken();
 

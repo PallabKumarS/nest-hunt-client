@@ -8,10 +8,10 @@ import {
   Users,
   Key,
   FileText,
-  Plus,
   ChevronUp,
   LogIn,
   HomeIcon,
+  TrainTrack,
 } from "lucide-react";
 
 import {
@@ -33,9 +33,9 @@ import {
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
 import { logout, userSelector } from "@/redux/features/authSlice";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { config } from "@/middleware";
 import { usePathname, useRouter } from "next/navigation";
 import { deleteCookie } from "@/services/AuthService";
+import { privateRoutes } from "@/constants";
 
 // common routes for all users
 const items = [
@@ -57,7 +57,7 @@ const items = [
   {
     title: "Settings",
     icon: Settings,
-    href: "/settings",
+    href: "/dashboard/settings",
   },
 ];
 
@@ -92,14 +92,14 @@ const landlordRoutes = [
 // tenant routes
 const tenantRoutes = [
   {
-    title: "My Rentals",
-    icon: Key,
+    title: "Applications",
+    icon: FileText,
     href: "/dashboard/tenant/requests",
   },
   {
-    title: "Applications",
-    icon: FileText,
-    href: "/dashboard/tenant/rentals",
+    title: "Track Requests",
+    icon: TrainTrack,
+    href: "/dashboard/tenant/track",
   },
 ];
 
@@ -112,14 +112,14 @@ export function AppSidebar() {
   const handleLogout = () => {
     dispatch(logout());
     deleteCookie();
-    if (config.matcher.some((route) => pathname.match(route))) {
+    if (privateRoutes.some((route) => pathname.match(route))) {
       router.push("/login");
     }
   };
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarContent>
+    <Sidebar className="h-full" collapsible="icon">
+      <SidebarContent className="">
         {/* Logo */}
         <SidebarGroup>
           <SidebarGroupContent>

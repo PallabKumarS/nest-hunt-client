@@ -1,18 +1,25 @@
+import { TListing } from "./listing";
+import { TUser } from "./user";
+
 export type TRequest = {
-  tenantId: string;
-  listingId: string;
-  landlordId: string;
+  tenantId: TUser;
+  listingId: TListing;
+  landlordId: TUser;
   requestId: string;
   status: "pending" | "approved" | "rejected" | "paid" | "cancelled";
   message?: string;
-  transaction?: {
-    paymentId?: string;
-    transactionStatus?: string;
-    paymentUrl?: string;
-    bankStatus?: string;
-    spCode?: string;
-    spMessage?: string;
-    method?: string;
-    dateTime?: string;
-  };
+  moveInDate: Date;
+  rentDuration: string;
+  transaction?: TTransaction;
+};
+
+export type TTransaction = {
+  paymentId?: string;
+  transactionStatus?: string;
+  paymentUrl?: string;
+  bankStatus?: string;
+  spCode?: string;
+  spMessage?: string;
+  method?: string;
+  dateTime?: string;
 };

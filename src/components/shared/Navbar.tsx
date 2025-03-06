@@ -17,9 +17,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { logout, userSelector } from "@/redux/features/authSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hook";
-import { config } from "@/middleware";
 import Searchbar from "./Searchbar";
 import { deleteCookie } from "@/services/AuthService";
+import { privateRoutes } from "@/constants";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,7 +37,7 @@ export default function Navbar() {
     dispatch(logout());
     deleteCookie();
 
-    if (config.matcher.some((route) => pathname.match(route))) {
+    if (privateRoutes.some((route) => pathname.match(route))) {
       router.push("/login");
     }
   };
@@ -74,11 +74,13 @@ export default function Navbar() {
         <div className="flex items-center gap-2">
           {user?.email ? (
             <>
-              <Link href="/create-listing" className="hidden sm:block">
-                <Button variant="outline" className="rounded-full">
-                  Post Rental
-                </Button>
-              </Link>
+              {user?.role === "landlord" && (
+                <Link href="/create-listing" className="hidden sm:block">
+                  <Button variant="outline" className="rounded-full">
+                    Post Rental
+                  </Button>
+                </Link>
+              )}
 
               <DropdownMenu>
                 <DropdownMenuTrigger>
@@ -155,7 +157,7 @@ export default function Navbar() {
                 {item.label}
               </Link>
             ))}
-            {user?.email && (
+            {user && user.role === "landlord" && (
               <Link
                 href="/dashboard/landlord/create-listing"
                 className="block text-muted-foreground hover:text-primary transition-colors"
