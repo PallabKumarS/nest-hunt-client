@@ -14,13 +14,13 @@ export const metadata: Metadata = {
 const ProfilePage = async () => {
   const user = await getMe();
 
-  if (!user?.data) {
-    return (
-      <Suspense fallback={<LoadingData />}>
-        <DelayedNoData />
-      </Suspense>
-    );
-  }
+  // if (!user?.data) {
+  //   return (
+  //     <Suspense fallback={<LoadingData />}>
+  //       <DelayedNoData />
+  //     </Suspense>
+  //   );
+  // }
 
   return (
     <Container>

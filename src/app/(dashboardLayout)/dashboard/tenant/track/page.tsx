@@ -16,13 +16,13 @@ export const metadata: Metadata = {
 const TrackingPage = async () => {
   const requests: any = await getPersonalRequests({ limit: 12 });
 
-  if (requests?.data?.length === 0) {
-    return (
-      <Suspense fallback={<LoadingData />}>
-        <DelayedNoData />
-      </Suspense>
-    );
-  }
+  // if (requests?.data?.length === 0) {
+  //   return (
+  //     <Suspense fallback={<LoadingData />}>
+  //       <DelayedNoData />
+  //     </Suspense>
+  //   );
+  // }
 
   return (
     <Container>

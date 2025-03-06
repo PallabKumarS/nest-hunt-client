@@ -28,13 +28,13 @@ const VerifyPaymentPage = async ({
 }) => {
   const request = await verifyPayment((await searchParams).order_id as string);
 
-  if (!request?.data) {
-    return (
-      <Suspense fallback={<LoadingData />}>
-        <DelayedNoData />
-      </Suspense>
-    );
-  }
+  // if (!request?.data) {
+  //   return (
+  //     <Suspense fallback={<LoadingData />}>
+  //       <DelayedNoData />
+  //     </Suspense>
+  //   );
+  // }
 
   return (
     <Container>

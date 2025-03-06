@@ -15,13 +15,13 @@ export const metadata: Metadata = {
 const CreateListingPage = async () => {
   const listings = await getPersonalListings();
 
-  if (listings?.data?.length === 0) {
-    return (
-      <Suspense fallback={<LoadingData />}>
-        <DelayedNoData/>
-      </Suspense>
-    );
-  }
+  // if (listings?.data?.length === 0) {
+  //   return (
+  //     <Suspense fallback={<LoadingData />}>
+  //       <DelayedNoData />
+  //     </Suspense>
+  //   );
+  // }
 
   return <CreateListing listings={listings?.data} />;
 };

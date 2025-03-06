@@ -15,13 +15,13 @@ export const metadata: Metadata = {
 const UserManagementPage = async () => {
   const users = await getAllUsers({ limit: 12 });
 
-  if (users?.data?.length === 0) {
-    return (
-      <Suspense fallback={<LoadingData />}>
-        <DelayedNoData />
-      </Suspense>
-    );
-  }
+  // if (users?.data?.length === 0) {
+  //   return (
+  //     <Suspense fallback={<LoadingData />}>
+  //       <DelayedNoData />
+  //     </Suspense>
+  //   );
+  // }
 
   return (
     <div>

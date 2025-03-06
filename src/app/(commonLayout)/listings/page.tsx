@@ -26,13 +26,13 @@ const AllListingsPage = async ({
   // Get all listings
   const listings = await getAllListings(enhancedSearchParams);
 
-  if (listings?.data?.length === 0) {
-    return (
-      <Suspense fallback={<LoadingData />}>
-        <DelayedNoData />
-      </Suspense>
-    );
-  }
+  // if (listings?.data?.length === 0) {
+  //   return (
+  //     <Suspense fallback={<LoadingData />}>
+  //       <DelayedNoData />
+  //     </Suspense>
+  //   );
+  // }
 
   return (
     <Container className="">
