@@ -2,6 +2,8 @@
 
 import { DialogComponent } from "@/components/shared/Dialog";
 import { TableComponent } from "@/components/shared/Table";
+import { userSelector } from "@/redux/features/authSlice";
+import { useAppSelector } from "@/redux/hook";
 import { deleteRequest, updateRequestStatus } from "@/services/RequestService";
 import { TMeta, TMongoose, TRequest } from "@/types";
 import { useRouter } from "next/navigation";
@@ -20,17 +22,17 @@ const RequestManagement = ({
   >(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<"edit" | "view">("view");
+  const user = useAppSelector(userSelector);
 
   const router = useRouter();
 
-  const heads = [
-    "Land Owner Info",
-    "Listing Info",
-    "Tenant Info",
-    "Status",
-    "Transaction",
-    "Actions",
-  ];
+  const heads = ["Land Owner Info", "Listing Info", "Tenant Info", "Status"];
+
+  if (user?.role === "tenant") {
+    heads.push("Transaction");
+    heads.push("Actions");
+  }
+
   const cellProperties: (keyof TRequest)[] = [
     "landlordId",
     "listingId",

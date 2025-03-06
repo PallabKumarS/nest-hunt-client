@@ -17,17 +17,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Ban, Edit, Eye, MapPin, Trash2 } from "lucide-react";
-import { TMeta, TMongoose, TRequest, TTransaction, TUser } from "@/types";
+import { TMeta, TMongoose, TRequest, TUser } from "@/types";
 import { PaginationComponent } from "./Pagination";
 import ConfirmationBox from "./ConfirmationBox";
 import { Button } from "../ui/button";
 import NoData from "./NoData";
-import Link from "next/link";
 import { useAppSelector } from "@/redux/hook";
 import { userSelector } from "@/redux/features/authSlice";
 import { usePathname, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createPayment } from "@/services/RequestService";
+import PhoneUpdateModal from "../modules/management/PhoneUpdateModal";
+import { Dispatch, SetStateAction, useState } from "react";
 
 type TTableProps<T> = {
   data: (T & TMongoose)[];
@@ -54,6 +55,7 @@ export function TableComponent<T>({
   onStatusChange,
   onRoleChange,
 }: TTableProps<T>) {
+  const [open, setOpen] = useState(false);
   const user = useAppSelector(userSelector);
   const pathname = usePathname();
   const router = useRouter();
@@ -136,6 +138,8 @@ export function TableComponent<T>({
                     prop,
                     item,
                     user,
+                    open,
+                    setOpen,
                     onStatusChange,
                     onRoleChange,
                     handleCreatePayment,
@@ -231,6 +235,8 @@ function formatCellContent<T>(
   prop: string | number | symbol,
   item: any,
   user: TUser | null,
+  open: boolean,
+  setOpen: Dispatch<SetStateAction<boolean>>,
   onStatusChange?: (data: T & TMongoose, status?: string) => void,
   onRoleChange?: (user: T & TMongoose, role: string) => void,
   handleCreatePayment?: (item: TRequest & TMongoose) => void,
@@ -359,6 +365,7 @@ function formatCellContent<T>(
       return (
         <DropdownMenu>
           <DropdownMenuTrigger
+            onClick={() => setOpen(!open)}
             className={`px-2 py-1 rounded-md ${
               content === "approved"
                 ? "bg-green-100 text-green-600"
@@ -371,7 +378,7 @@ function formatCellContent<T>(
           </DropdownMenuTrigger>
 
           {/* for landlord role  */}
-          {user?.role === "landlord" && (
+          {user?.role === "landlord" && !(user?.phone as string) ? (
             <DropdownMenuContent className="">
               <DropdownMenuItem
                 disabled={content === "approved" || content === "paid"}
@@ -398,6 +405,8 @@ function formatCellContent<T>(
                 Reject
               </DropdownMenuItem>
             </DropdownMenuContent>
+          ) : (
+            <PhoneUpdateModal user={user} request={item} open={open} setOpen={setOpen} />
           )}
 
           {/* for admin role  */}
@@ -435,37 +444,41 @@ function formatCellContent<T>(
 
     // For transaction status
     if (prop === "transaction") {
-      return item?.status !== "rejected" && user?.role === "tenant" ? (
-        // <Link href={`${item?.status === "paid" ? "" : content.paymentUrl}`}>
-        <Button
-          onClick={() => {
-            item?.status !== "paid" &&
-              item?.status !== "rejected" &&
-              handleCreatePayment &&
-              handleCreatePayment(item);
-            item?.status !== "paid" &&
-              item?.status !== "rejected" &&
-              router &&
-              router.push(item?.status === "paid" ? "" : content.paymentUrl);
-          }}
-          size={"sm"}
-          variant={
-            item?.status !== "paid" && item?.status !== "rejected"
-              ? "link"
-              : "default"
-          }
-          className="py-1 rounded-md bg-green-200 text-green-600 hover:bg-amber-50 dark:hover:bg-blue-950"
-        >
-          {item?.status === "paid"
-            ? content.paymentId
-            : item?.status === "cancelled"
-            ? "Payment Link"
-            : "Pay"}
-        </Button>
-      ) : (
-        // </Link>
-        <p className="py-1 rounded-md  bg-red-300 text-red-600">-</p>
-      );
+      if (user?.role === "landlord") {
+        return null;
+      } else {
+        return item?.status !== "rejected" && user?.role === "tenant" ? (
+          // <Link href={`${item?.status === "paid" ? "" : content.paymentUrl}`}>
+          <Button
+            onClick={() => {
+              item?.status !== "paid" &&
+                item?.status !== "rejected" &&
+                handleCreatePayment &&
+                handleCreatePayment(item);
+              item?.status !== "paid" &&
+                item?.status !== "rejected" &&
+                router &&
+                router.push(item?.status === "paid" ? "" : content.paymentUrl);
+            }}
+            size={"sm"}
+            variant={
+              item?.status !== "paid" && item?.status !== "rejected"
+                ? "link"
+                : "default"
+            }
+            className="py-1 rounded-md bg-green-200 text-green-600 hover:bg-amber-50 dark:hover:bg-blue-950"
+          >
+            {item?.status === "paid"
+              ? content.paymentId
+              : item?.status === "cancelled"
+              ? "Payment Link"
+              : "Pay"}
+          </Button>
+        ) : (
+          // </Link>
+          <p className="py-1 rounded-md  bg-red-300 text-red-600">-</p>
+        );
+      }
     }
 
     // For user IDs (landlord and tenant)

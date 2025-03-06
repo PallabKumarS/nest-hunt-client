@@ -21,6 +21,7 @@ const roleBasedPrivateRoutes = {
     /^\/listings\/.*$/,
     /^\/dashboard\/tenant(?:\/.*)?$/,
     /^\/dashboard\/(?:profile|settings)(?:\/.*)?$/,
+    /^\/verify-payment/,
   ],
 };
 
@@ -57,5 +58,6 @@ export const config = {
     // "/dashboard/landlord/:path*",
     // "/dashboard/tenant/:path*",
     "/dashboard/:path*",
+    "/verify-payment",
   ],
 };

@@ -1,7 +1,5 @@
 "use client";
 
-import { userSelector } from "@/redux/features/authSlice";
-import { useAppSelector } from "@/redux/hook";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,10 +13,9 @@ import {
   IdCard,
 } from "lucide-react";
 import Link from "next/link";
+import { TMongoose, TUser } from "@/types";
 
-const Profile = () => {
-  const user = useAppSelector(userSelector);
-
+const Profile = ({ user }: { user: TUser & TMongoose }) => {
   return (
     <div className="container mx-auto py-8 px-4">
       <Card className="max-w-4xl mx-auto p-6">

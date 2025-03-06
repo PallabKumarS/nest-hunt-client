@@ -119,6 +119,38 @@ export const updateRequestStatus = async (
     return Error(error.message || "Something went wrong");
   }
 };
+// Update request status
+export const updateRequest = async (
+  requestId: string,
+  payload: any
+): Promise<any> => {
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_API}/requests/${requestId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+        headers: {
+          "Content-type": "application/json",
+          Authorization: await getValidToken(),
+        },
+      }
+    );
+
+    const result = await res.json();
+
+    revalidateTag("listings");
+    revalidateTag("PListings");
+    revalidateTag("listing");
+    revalidateTag("user");
+    revalidateTag("users");
+    revalidateTag("PUsers");
+
+    return result;
+  } catch (error: any) {
+    return Error(error.message || "Something went wrong");
+  }
+};
 
 // Delete request
 export const deleteRequest = async (requestId: string): Promise<any> => {

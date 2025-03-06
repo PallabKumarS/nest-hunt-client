@@ -10,6 +10,7 @@ export type TRequest = {
   message?: string;
   moveInDate: Date;
   rentDuration: string;
+  landlordPhoneNumber?: string;
   transaction?: TTransaction;
 };
 
