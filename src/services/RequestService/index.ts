@@ -205,8 +205,6 @@ export const verifyPayment = async (paymentId: string): Promise<any> => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_API}/requests/verify-payment/${paymentId}`,
       {
-        method: "PATCH",
-        body: JSON.stringify({}),
         headers: {
           "Content-type": "application/json",
           Authorization: await getValidToken(),

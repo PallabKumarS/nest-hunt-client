@@ -55,7 +55,7 @@ const ListingCard = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden h-[600px]">
         <CardHeader className="p-0">
           <div className="relative">
             <ImageSlider images={listing.images} variant="card" />
@@ -85,7 +85,7 @@ const ListingCard = ({
           </div>
         </CardContent>
 
-        <CardFooter className="flex flex-col gap-4 border-t p-4">
+        <CardFooter className="flex flex-col gap-4 border-t p-4 mt-auto">
           <div className="flex w-full items-center justify-between">
             <div className="flex items-center gap-2">
               <Bed className="h-4 w-4" />

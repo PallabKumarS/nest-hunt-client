@@ -378,7 +378,7 @@ function formatCellContent<T>(
           </DropdownMenuTrigger>
 
           {/* for landlord role  */}
-          {user?.role === "landlord" && !(user?.phone as string) ? (
+          {user?.role === "landlord" && (user?.phone as string) ? (
             <DropdownMenuContent className="">
               <DropdownMenuItem
                 disabled={content === "approved" || content === "paid"}
@@ -406,7 +406,14 @@ function formatCellContent<T>(
               </DropdownMenuItem>
             </DropdownMenuContent>
           ) : (
-            <PhoneUpdateModal user={user} request={item} open={open} setOpen={setOpen} />
+            user?.role === "landlord" && (
+              <PhoneUpdateModal
+                user={user}
+                request={item}
+                open={open}
+                setOpen={setOpen}
+              />
+            )
           )}
 
           {/* for admin role  */}
@@ -447,7 +454,9 @@ function formatCellContent<T>(
       if (user?.role === "landlord") {
         return null;
       } else {
-        return item?.status !== "rejected" && user?.role === "tenant" ? (
+        return item?.status !== "rejected" &&
+          item?.status !== "pending" &&
+          user?.role === "tenant" ? (
           // <Link href={`${item?.status === "paid" ? "" : content.paymentUrl}`}>
           <Button
             onClick={() => {
@@ -476,7 +485,9 @@ function formatCellContent<T>(
           </Button>
         ) : (
           // </Link>
-          <p className="py-1 rounded-md  bg-red-300 text-red-600">-</p>
+          <p className="py-1 rounded-md  bg-red-300 text-red-600">
+            {item?.status === "paid" ? "Paid" : "-"}
+          </p>
         );
       }
     }

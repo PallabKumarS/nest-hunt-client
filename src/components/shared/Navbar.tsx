@@ -75,7 +75,10 @@ export default function Navbar() {
           {user?.email ? (
             <>
               {user?.role === "landlord" && (
-                <Link href="/create-listing" className="hidden sm:block">
+                <Link
+                  href="/dashboard/landlord/create-listing"
+                  className="hidden sm:block"
+                >
                   <Button variant="outline" className="rounded-full">
                     Post Rental
                   </Button>
