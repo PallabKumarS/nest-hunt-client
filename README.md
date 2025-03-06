@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nest Hunt - Frontend
 
-## Getting Started
+This project is the frontend for Nest Hunt, built using Next.js with TypeScript.
+It provides role-based dashboards for tenants, landlords, and admins, along with
+property listing management and request tracking.
 
-First, run the development server:
+## Live URL
+
+[Deployed Frontend](https://pks-nest-hunt-client.vercel.app)
+
+## Repository
+
+[GitHub Repository](https://github.com/PallabKumarS/assignment-06-nest-hunt-client)
+
+## Installation
+
+To install dependencies, run:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+bun install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Running the Project
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To start the development server:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+bun run dev
+```
 
-## Learn More
+To build the project:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+bun run build
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To start the production server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+bun run start
+```
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `/listings` - View all property listings
+- `/listings/[listingId]` - View details of a specific listing
+- `/dashboard` - Role-based dashboard
+  - `/dashboard/profile` - User profile
+  - `/dashboard/settings` - Account settings
+  - `/dashboard/admin/user-management` - Admin user management
+  - `/dashboard/admin/listing-management` - Admin listing management
+  - `/dashboard/tenant/requests` - Tenant request tracking
+  - `/dashboard/landlord/requests` - Landlord request tracking
+  - `/dashboard/landlord/listings` - Landlord create and manage listings
+- `/terms` - Terms & Conditions
+- `/privacy` - Privacy Policy
+- `/about` - About Us
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Environment Variables
+
+Create a `.env.local` file and add the following variables:
+
+```env
+NEXT_PUBLIC_API_URL="your api url"
+```
+
+## Dependencies
+
+- **Next.js** (15.2.0)
+- **TypeScript** (5.x)
+- **React** (19.x)
+- **Redux Toolkit**
+- **React Hook Form**
+- **Zod** (for validation)
+- **Tailwind CSS**
+- **Framer Motion**
+
+## Development Tools
+
+- ESLint
+- Tailwind CSS
+- Radix UI Components
