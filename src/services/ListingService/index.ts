@@ -80,6 +80,7 @@ export const createListing = async (listingData: any): Promise<any> => {
     revalidateTag("listings");
     revalidateTag("PListings");
     revalidateTag("locations");
+    revalidateTag("listing");
 
     return await res.json();
   } catch (error: any) {

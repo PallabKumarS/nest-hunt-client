@@ -185,7 +185,7 @@ export function TableComponent<T>({
                 {/* delete action  */}
                 {pathname.includes("requests")
                   ? onDelete &&
-                    user?.role !== "tenant" &&
+                    user?.role !== "landlord" &&
                     !(item as any)?.isDeleted && (
                       <ConfirmationBox
                         trigger={
@@ -460,7 +460,7 @@ function formatCellContent<T>(
             ? content.paymentId
             : item?.status === "cancelled"
             ? "Payment Link"
-            : "-"}
+            : "Pay"}
         </Button>
       ) : (
         // </Link>

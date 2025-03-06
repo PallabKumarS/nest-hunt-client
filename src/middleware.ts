@@ -6,14 +6,22 @@ type Role = keyof typeof roleBasedPrivateRoutes;
 const authRoutes = ["/login", "/register"];
 
 const roleBasedPrivateRoutes = {
-  admin: [/^\/admin/, /^\/listings\/.*$/, /^\/dashboard\/admin/],
+  admin: [
+    /^\/listings\/.*$/,
+    /^\/dashboard\/admin(?:\/.*)?$/,
+    /^\/dashboard\/(?:profile|settings)(?:\/.*)?$/,
+  ],
   landlord: [
-    /^\/landlord/,
     /^\/create-listing/,
     /^\/listings\/.*$/,
-    /^\/dashboard\/landlord/,
+    /^\/dashboard\/landlord(?:\/.*)?$/,
+    /^\/dashboard\/(?:profile|settings)(?:\/.*)?$/,
   ],
-  tenant: [/^\/tenant/, /^\/listings\/.*$/, /^\/dashboard\/tenant/],
+  tenant: [
+    /^\/listings\/.*$/,
+    /^\/dashboard\/tenant(?:\/.*)?$/,
+    /^\/dashboard\/(?:profile|settings)(?:\/.*)?$/,
+  ],
 };
 
 export const middleware = async (req: NextRequest) => {
@@ -45,8 +53,9 @@ export const middleware = async (req: NextRequest) => {
 export const config = {
   matcher: [
     "/listings/:listingId",
-    "/dashboard/admin/:path*",
-    "/dashboard/landlord/:path*",
-    "/dashboard/tenant/:path*",
+    // "/dashboard/admin/:path*",
+    // "/dashboard/landlord/:path*",
+    // "/dashboard/tenant/:path*",
+    "/dashboard/:path*",
   ],
 };
