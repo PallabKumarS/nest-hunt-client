@@ -1,3 +1,5 @@
+import AllTrack from "@/components/modules/pages/AllTrack";
+import Container from "@/components/shared/Container";
 import DelayedNoData from "@/components/shared/DelayedNoData";
 import LoadingData from "@/components/shared/Loading";
 import NoData from "@/components/shared/NoData";
@@ -12,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 const TrackingPage = async () => {
-  const requests = await getPersonalRequests({ limit: 12 });
+  const requests: any = await getPersonalRequests({ limit: 12 });
 
   if (requests?.data?.length === 0) {
     return (
@@ -23,9 +25,9 @@ const TrackingPage = async () => {
   }
 
   return (
-    <div>
-      <h1>This is TrackingPage Component</h1>
-    </div>
+    <Container>
+      <AllTrack requests={requests?.data} />
+    </Container>
   );
 };
 

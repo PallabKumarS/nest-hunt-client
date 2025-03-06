@@ -124,7 +124,7 @@ const RequestTracking = ({ request }: { request: TRequest & TMongoose }) => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {request.status !== "cancelled" ? (
+          {request.status !== "cancelled" && request.status !== "rejected" ? (
             <div>
               <OrderStep
                 title="Pending"
@@ -145,11 +145,20 @@ const RequestTracking = ({ request }: { request: TRequest & TMongoose }) => {
                 isCompleted={currentStep > 2}
               />
             </div>
-          ) : (
+          ) : request.status === "cancelled" ? (
             <div className="text-center text-red-500">
               <XCircle className="mx-auto mb-4 w-12 h-12" />
               <h3 className="text-xl font-semibold">Order Cancelled</h3>
-              <p>Either your request was rejected or got cancelled</p>
+              <p>
+                Your request is cancelled either accidentally or you have done
+                so
+              </p>
+            </div>
+          ) : (
+            <div className="text-center text-red-500">
+              <XCircle className="mx-auto mb-4 w-12 h-12" />
+              <h3 className="text-xl font-semibold">Order Rejected</h3>
+              <p>Your request was rejected by owner</p>
             </div>
           )}
         </CardContent>
