@@ -81,8 +81,14 @@ export default function ListingForm({
     };
 
     if (edit) {
+      const editData = {
+        ...values,
+        images,
+        landlordId: listing?.landlordId.userId as string,
+      };
+
       try {
-        const res = await updateListing(listing?.listingId as string, data);
+        const res = await updateListing(listing?.listingId as string, editData);
         if (res.success) {
           toast.success(res.message, {
             id: toastId,

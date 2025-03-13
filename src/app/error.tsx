@@ -19,7 +19,7 @@ export default function Error({
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 px-4 py-8">
       <div className="max-w-md w-full space-y-8 text-center">
         <Image
-          src="/error-illustration.svg"
+          src="/assets/error.png"
           alt="Something Went Wrong"
           width={300}
           height={300}

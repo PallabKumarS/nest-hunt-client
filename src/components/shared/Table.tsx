@@ -90,8 +90,8 @@ export function TableComponent<T>({
   }
 
   return (
-    <div className="w-full border overflow-x-auto rounded-lg shadow-md">
-      <Table>
+    <div className="w-full border rounded-lg shadow-md">
+      <Table className="overflow-x-auto">
         {caption && (
           <TableCaption className="text-lg font-semibold mb-4">
             {caption}

@@ -21,7 +21,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { getListingLocations } from "@/services/ListingService";
@@ -29,34 +29,41 @@ import { Checkbox } from "../ui/checkbox";
 
 const Filter = () => {
   const router = useRouter();
-  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const pathname = usePathname();
+  const [priceRange, setPriceRange] = useState([0, 50000]);
   const [locations, setLocations] = useState<[{ location: string }] | []>([]);
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
-  const [availability, setAvailability] = useState<boolean>(true);
-  const [bedrooms, setBedrooms] = useState<number>(0);
 
   useEffect(() => {
-    const fetchLocations = async () => {
+    const fetchLocations: any = async () => {
       const res = await getListingLocations();
       setLocations(res?.data);
     };
 
     fetchLocations();
-  }, []);
+  }, [pathname, router]);
 
-  const handleFilter = () => {
+  const handleFilter = (query: {
+    houseLocation?: string[];
+    [key: string]: any;
+  }) => {
     const params = new URLSearchParams();
 
-    if (bedrooms > 0) {
-      params.set("bedroomNumber", bedrooms.toString());
+    if (Number(query.bedrooms) > 0) {
+      params.set("bedroomNumber", Number(query.bedrooms).toString());
     }
 
-    params.set("minPrice", priceRange[0].toString());
-    params.set("maxPrice", priceRange[1].toString());
-    params.set("isAvailable", availability.toString());
+    if (Number(query.minPrice) && Number(query.minPrice) > 0) {
+      params.set("minPrice", Number(query.minPrice).toString());
+      params.set("maxPrice", Number(query.maxPrice).toString());
+    }
 
-    if (selectedLocations.length > 0) {
-      params.set("houseLocation", selectedLocations.join(", "));
+    if (query.availability !== undefined) {
+      params.set("availability", String(query.availability));
+    }
+
+    if (Array.isArray(query.houseLocation)) {
+      params.set("houseLocation", query.houseLocation.join(", "));
     }
 
     router.push(`/listings?${params.toString()}`);
@@ -80,12 +87,16 @@ const Filter = () => {
             <label className="text-sm font-medium">Price Range</label>
             <div className="pt-2">
               <Slider
-                defaultValue={[0, 10000]}
-                max={10000}
-                step={100}
+                defaultValue={[0, 50000]}
+                max={50000}
+                step={500}
                 value={priceRange}
                 onValueChange={(priceRange) => {
                   setPriceRange(priceRange);
+                  handleFilter({
+                    minPrice: priceRange[0],
+                    maxPrice: priceRange[1],
+                  });
                 }}
                 className="my-4"
               />
@@ -114,6 +125,9 @@ const Filter = () => {
                           }
                           return [...prev, value];
                         });
+                        handleFilter({
+                          houseLocation: [...selectedLocations, value],
+                        });
                       }}
                     >
                       <div className="flex items-center gap-2">
@@ -138,7 +152,11 @@ const Filter = () => {
               type="number"
               min={1}
               placeholder="Number of bedrooms"
-              onChange={(e) => setBedrooms(Number(e.target.value))}
+              onChange={(e) => {
+                handleFilter({
+                  bedrooms: Number(e.target.value),
+                });
+              }}
             />
           </div>
 
@@ -146,8 +164,11 @@ const Filter = () => {
           <div className="space-y-2">
             <label className="text-sm font-medium">Availability</label>
             <RadioGroup
-              defaultValue="true"
-              onValueChange={(value) => setAvailability(value === "true")}
+              onValueChange={(value) => {
+                handleFilter({
+                  availability: value === "true" ? "true" : "false",
+                });
+              }}
               className="flex flex-col space-y-1 mt-2"
             >
               <div className="flex items-center space-x-2">
@@ -165,9 +186,12 @@ const Filter = () => {
         <Button
           variant={"outline"}
           className="w-full mt-4"
-          onClick={() => handleFilter()}
+          onClick={() => {
+            handleFilter({});
+            setSelectedLocations([]);
+          }}
         >
-          Filter
+          Clear
         </Button>
       </SheetContent>
     </Sheet>

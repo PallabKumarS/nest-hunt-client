@@ -40,7 +40,7 @@ const HeroSection = () => {
             className="flex justify-center"
           >
             <Link
-              href="/create-listing"
+              href="/dashboard/landlord/create-listing"
               className="inline-flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-primary rounded-lg hover:bg-primary/90 transition-colors shadow-lg hover:shadow-xl"
             >
               <Home className="mr-2 h-5 w-5 " /> Post Rental House Info
