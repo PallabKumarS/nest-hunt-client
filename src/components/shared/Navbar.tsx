@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "../ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 import { LogOut, Menu, X } from "lucide-react";
 import Link from "next/link";
 import {
@@ -129,14 +130,25 @@ export default function Navbar() {
           <Button
             variant="outline"
             size="icon"
-            className="md:hidden rounded-full"
+            className="md:hidden rounded-full transition-all duration-300 ease-in-out"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            {isMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
+            <div className="relative">
+              <X
+                className={`absolute -translate-y-2 -translate-x-2 transition-all duration-300 ease-in-out ${
+                  isMenuOpen
+                    ? "opacity-100 rotate-0 scale-100"
+                    : "opacity-0 rotate-90 scale-0"
+                }`}
+              />
+              <Menu
+                className={`absolute -translate-y-2 -translate-x-2 transition-all duration-300 ease-in-out ${
+                  isMenuOpen
+                    ? "opacity-0 rotate-90 scale-0"
+                    : "opacity-100 rotate-0 scale-100"
+                }`}
+              />
+            </div>
           </Button>
         </div>
       </nav>
@@ -148,29 +160,38 @@ export default function Navbar() {
 
       {/* Mobile Navigation Menu */}
       {isMenuOpen && (
-        <div className="md:hidden border-t">
-          <div className="container mx-auto px-4 py-4 space-y-4">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="block text-muted-foreground hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
-            {user && user.role === "landlord" && (
-              <Link
-                href="/dashboard/landlord/create-listing"
-                className="block text-muted-foreground hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Post Rental
-              </Link>
-            )}
-          </div>
-        </div>
+        <AnimatePresence>
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.7, ease: "easeInOut" }}
+            className="md:hidden border-t"
+          >
+            <div className="container mx-auto px-4 py-4 space-y-4">
+              {navItems.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="block text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              {user && user.role === "landlord" && (
+                <Link
+                  href="/dashboard/landlord/create-listing"
+                  className="block text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Post Rental
+                </Link>
+              )}
+            </div>
+          </motion.div>
+        </AnimatePresence>
       )}
     </header>
   );

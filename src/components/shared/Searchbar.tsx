@@ -1,11 +1,12 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Search } from "lucide-react";
+import { ChevronUpCircle, Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { TListing } from "@/types";
 import Image from "next/image";
 import { getAllListings } from "@/services/ListingService";
+import { Button } from "../ui/button";
 
 const isValidImageUrl = (url: string) => {
   const pattern = new RegExp(
@@ -68,6 +69,12 @@ const Searchbar = () => {
           className="w-full px-4 py-2 rounded-full border border-border focus:outline-none focus:ring-2 focus:ring-primary/20 pl-10"
         />
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        {isOpen && (
+          <ChevronUpCircle
+            onClick={() => setIsOpen(false)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+          />
+        )}
       </div>
 
       {isOpen && (

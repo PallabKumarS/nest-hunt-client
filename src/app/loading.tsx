@@ -1,5 +1,5 @@
-import LoadingData from "@/components/shared/Loading";
+import LoadingC from "@/components/ui/loading";
 
 export default function Loading() {
-  return <LoadingData />;
+  return <LoadingC />;
 }

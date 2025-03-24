@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -76,7 +77,7 @@ const Filter = () => {
           <SlidersHorizontal className="h-4 w-4" />
         </Button>
       </SheetTrigger>
-      <SheetContent className="px-3 md:px-8 bg-amber-50">
+      <SheetContent className="px-3 md:px-8 bg-sidebar">
         <SheetDescription></SheetDescription>
         <SheetHeader>
           <SheetTitle>Filter Listings</SheetTitle>
@@ -110,7 +111,7 @@ const Filter = () => {
           {/* locations here  */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Location</label>
-            <Command className="bg-card">
+            <Command className="bg-chart-5">
               <CommandInput placeholder="Type a location or search..." />
               <CommandList>
                 <CommandEmpty>No results found.</CommandEmpty>

@@ -38,12 +38,17 @@
   --input: hsla(82, 17%, 75%, 0.815); /* input field border color  */
   --ring: hsl(73, 67%, 54%); /* selected border color  */
   --radius: 0.75rem;
-  --chart-1: hsl(48,100%,96%);
+  --chart-1: hsl(48, 100%, 96%);
   --chart-2: hsl(170, 60%, 45%);
   --chart-3: hsl(0, 70%, 50%);
   --chart-4: hsl(280, 60%, 55%);
-  --chart-5: hsl(15, 75%, 55%);
-  --sidebar: hsl(65, 29%, 92%, 0.74);
+  --chart-5: hsla(84, 33%, 97%, 0.63);
+  --sidebar: hsl(
+    65,
+    29%,
+    92%,
+    0.74
+  ); /* sidebar background color and filter bar background color  */
   --sidebar-foreground: hsl(240 5.3% 26.1%);
   --sidebar-primary: hsl(240 5.9% 10%);
   --sidebar-primary-foreground: hsl(78, 18%, 43%);
@@ -70,14 +75,14 @@
   --accent-foreground: hsl(0, 0%, 100%);
   --destructive: hsl(0, 70%, 50%);
   --destructive-foreground: hsl(0, 0%, 100%);
-  --border: hsl(225, 20%, 25%);
+  --border: hsl(98, 73%, 14%);
   --input: hsl(225, 20%, 25%);
-  --ring: hsl(210, 65%, 55%);
+  --ring: hsl(98, 75%, 27%);
   --chart-1: hsl(209, 61%, 11%);
   --chart-2: hsl(170, 60%, 50%);
   --chart-3: hsl(45, 70%, 55%);
   --chart-4: hsl(280, 60%, 60%);
-  --chart-5: hsl(15, 75%, 60%);
+  --chart-5: hsla(240, 68%, 17%, 0.932);
   --sidebar: hsl(240 5.9% 10%);
   --sidebar-foreground: hsl(240 4.8% 95.9%);
   --sidebar-primary: hsl(224.3 76.3% 48%);
