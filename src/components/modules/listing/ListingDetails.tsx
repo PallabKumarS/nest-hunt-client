@@ -26,18 +26,18 @@ const ListingDetails = ({ listing }: ListingDetailsProps) => {
       const requests = await getPersonalRequests();
 
       const filteredRequests = requests?.data?.filter(
-        (request: TRequest) => request.listingId.listingId === listing.listingId
+        (request: TRequest) => request?.listingId.listingId === listing.listingId
       );
 
       const isMatched = filteredRequests?.some(
-        (request: TRequest) => request.tenantId.userId === user?.userId
+        (request: TRequest) => request?.tenantId.userId === user?.userId
       );
 
       setIsMatched(isMatched);
     };
 
     getRequests();
-  }, [listing.listingId, user?.userId]);
+  }, [listing?.listingId, user?.userId]);
 
   return (
     <motion.div

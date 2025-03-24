@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
 
 import { getValidToken } from "@/lib/verifyToken";
@@ -31,9 +32,6 @@ export const getSingleListing = async (listingId: string) => {
       {
         next: {
           tags: ["listing"],
-        },
-        headers: {
-          Authorization: await getValidToken(),
         },
       }
     );

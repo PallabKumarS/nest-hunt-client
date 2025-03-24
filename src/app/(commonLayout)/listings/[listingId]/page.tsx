@@ -25,6 +25,8 @@ const ListingDetailsPage = async ({
   const listingId = (await params).listingId;
   const listing = await getSingleListing(listingId);
 
+  console.log(listing)
+
   if (!listing) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-4">
