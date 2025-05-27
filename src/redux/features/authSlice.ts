@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { clearWishlist } from "./wishlistSlice";
 
 interface IInitialState {
   user: {
@@ -35,7 +36,16 @@ const authSlice = createSlice({
       state.user = null;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(clearWishlist, (state) => {});
+  },
 });
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const logoutUser = () => (dispatch: any) => {
+  dispatch(logout());
+  dispatch(clearWishlist());
+};
 
 export const userSelector = (state: RootState) => {
   return state.auth.user;

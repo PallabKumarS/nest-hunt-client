@@ -4,14 +4,28 @@ import { TListing, TMongoose, TRequest } from "@/types";
 import { motion } from "framer-motion";
 import ImageSlider from "@/components/shared/ImageSlider";
 import { Badge } from "@/components/ui/badge";
-import { Bed, MapPin, Check, Calendar, ReceiptTextIcon } from "lucide-react";
+import {
+  Bed,
+  MapPin,
+  Check,
+  Calendar,
+  ReceiptTextIcon,
+  Heart,
+} from "lucide-react";
 import { formatDistance } from "date-fns";
-import { useAppSelector } from "@/redux/hook";
+import { useAppSelector, useAppDispatch } from "@/redux/hook";
 import { userSelector } from "@/redux/features/authSlice";
+import {
+  isInWishlistSelector,
+  addToWishlist,
+  removeFromWishlist,
+} from "@/redux/features/wishlistSlice";
 import { Modal } from "@/components/shared/Modal";
 import RequestForm from "@/components/forms/RequestForm";
 import { useEffect, useState } from "react";
 import { getPersonalRequests } from "@/services/RequestService";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface ListingDetailsProps {
   listing: TListing & TMongoose;
@@ -20,13 +34,16 @@ interface ListingDetailsProps {
 const ListingDetails = ({ listing }: ListingDetailsProps) => {
   const [isMatched, setIsMatched] = useState<boolean>(false);
   const user = useAppSelector(userSelector);
+  const dispatch = useAppDispatch();
+  const isInWishlist = useAppSelector(isInWishlistSelector(listing.listingId));
 
   useEffect(() => {
     const getRequests = async () => {
       const requests = await getPersonalRequests();
 
       const filteredRequests = requests?.data?.filter(
-        (request: TRequest) => request?.listingId.listingId === listing.listingId
+        (request: TRequest) =>
+          request?.listingId.listingId === listing.listingId
       );
 
       const isMatched = filteredRequests?.some(
@@ -38,6 +55,21 @@ const ListingDetails = ({ listing }: ListingDetailsProps) => {
 
     getRequests();
   }, [listing?.listingId, user?.userId]);
+
+  const handleWishlistToggle = () => {
+    if (!user) {
+      toast.error("Please login to add properties to wishlist");
+      return;
+    }
+
+    if (isInWishlist) {
+      dispatch(removeFromWishlist(listing.listingId));
+      toast.success("Removed from wishlist");
+    } else {
+      dispatch(addToWishlist(listing));
+      toast.success("Added to wishlist");
+    }
+  };
 
   return (
     <motion.div
@@ -52,11 +84,31 @@ const ListingDetails = ({ listing }: ListingDetailsProps) => {
           <h1 className="text-3xl font-bold tracking-tight">
             {listing.houseLocation}
           </h1>
-          <Badge
-            className={listing.isAvailable ? "bg-green-500" : "bg-red-500"}
-          >
-            {listing.isAvailable ? "Available" : "Rented"}
-          </Badge>
+          <div className="flex items-center gap-3">
+            <Badge
+              className={listing.isAvailable ? "bg-green-500" : "bg-red-500"}
+            >
+              {listing.isAvailable ? "Available" : "Rented"}
+            </Badge>
+            {user && (
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={handleWishlistToggle}
+                className={`transition-colors ${
+                  isInWishlist
+                    ? "bg-red-50 border-red-200 hover:bg-red-100"
+                    : "hover:bg-gray-50"
+                }`}
+              >
+                <Heart
+                  className={`h-5 w-5 transition-colors ${
+                    isInWishlist ? "fill-red-500 text-red-500" : "text-gray-500"
+                  }`}
+                />
+              </Button>
+            )}
+          </div>
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <MapPin className="h-4 w-4" />
