@@ -31,6 +31,11 @@ const wishlistSlice = createSlice({
       state.properties = [];
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase("auth/logout", (state) => {
+      state.properties = [];
+    });
+  },
 });
 
 export const wishlistSelector = (state: RootState) => {
